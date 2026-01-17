@@ -24,22 +24,25 @@
         margin: 0 auto;
       }
 
+      /* ✅ remove underline + make a bit more modern */
       .section-title {
         text-align: center;
-        font-size: 22px;
-        font-weight: 600;
-        margin-bottom: 14px;
-        text-decoration: underline;
-        text-underline-offset: 6px;
+        font-size: 28px;
+        font-weight: 800;
+        margin-bottom: 18px;
+        text-decoration: none;
+        letter-spacing: 0.2px;
       }
 
       /* One ticker tape row */
       .tape {
         max-width: 980px;
         margin: 0 auto 28px;
-        border: 1px solid #000;
+        border: 1px solid rgba(0, 0, 0, 0.14);
         background: #fff;
-        padding: 6px 8px;
+        padding: 10px 12px;
+        border-radius: 14px;             /* ✅ smooth edges */
+        box-shadow: 0 1px 0 rgba(0,0,0,.04);
       }
 
       /* GRID */
@@ -52,19 +55,31 @@
       .chart-block {
         display: flex;
         flex-direction: column;
-        gap: 8px;
+        gap: 10px;
       }
 
+      /* ✅ label pill: offwhite background, bigger + bolder */
       .chart-label {
-        font-size: 18px;
-        font-weight: 500;
+        display: inline-flex;
+        align-self: flex-start;
+        background: #f6f7f9;             /* offwhite-like */
+        border: 1px solid rgba(0, 0, 0, 0.12);
+        border-radius: 14px;             /* smooth edges */
+        padding: 10px 14px;
+        font-size: 20px;                 /* bigger */
+        font-weight: 800;                /* bolder */
         line-height: 1.1;
+        box-shadow: 0 1px 0 rgba(0,0,0,.03);
       }
 
+      /* ✅ rounded chart containers */
       .chart-frame {
         background: #ffffff;
-        border: 1px solid #000;
+        border: 1px solid rgba(0, 0, 0, 0.14);
         height: 360px;
+        border-radius: 18px;             /* smooth edges */
+        overflow: hidden;                /* keep iframe corners rounded */
+        box-shadow: 0 1px 0 rgba(0,0,0,.04);
       }
 
       iframe {
@@ -84,6 +99,9 @@
         }
         .tape {
           max-width: 100%;
+        }
+        .section-title {
+          font-size: 26px;
         }
       }
     </style>
