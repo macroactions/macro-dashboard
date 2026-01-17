@@ -13,6 +13,7 @@
         color: #111;
       }
 
+      /* SECTION */
       .section {
         background: #f2f2f2; /* very light gray */
         padding: 48px 24px 56px;
@@ -32,6 +33,7 @@
         text-underline-offset: 6px;
       }
 
+      /* GRID */
       .grid {
         display: grid;
         grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -44,7 +46,7 @@
         gap: 10px;
       }
 
-      /* Header row (label + live quote) */
+      /* Label + Ticker Tape row (like your mock) */
       .rowhead {
         display: flex;
         align-items: center;
@@ -56,22 +58,23 @@
         font-size: 18px;
         font-weight: 500;
         line-height: 1.1;
+        white-space: nowrap;
       }
 
-      /* Makes the quote widget area “feel” bigger */
-      .quote {
-        width: 220px;      /* adjust for bigger/smaller quote */
-        height: 44px;      /* adjust height */
+      .ticker-wrap {
+        width: 210px;        /* controls how wide the tape appears */
+        height: 34px;        /* controls tape height */
+        border: 1px solid #000;
+        background: #fff;
         display: flex;
         align-items: center;
-        justify-content: flex-end;
+        overflow: hidden;
       }
 
-      .quote iframe {
+      /* TradingView widget will fill this */
+      .ticker-wrap > div {
         width: 100%;
         height: 100%;
-        border: 0;
-        display: block;
       }
 
       .chart-frame {
@@ -80,13 +83,14 @@
         height: 360px;
       }
 
-      .chart-frame iframe {
+      iframe {
         width: 100%;
         height: 100%;
         border: 0;
         display: block;
       }
 
+      /* RESPONSIVE */
       @media (max-width: 900px) {
         .grid {
           grid-template-columns: 1fr;
@@ -95,14 +99,15 @@
         .chart-frame {
           height: 420px;
         }
-        .quote {
-          width: 200px;
+        .ticker-wrap {
+          width: 190px;
         }
       }
     </style>
   </head>
 
   <body>
+    <!-- DOMESTIC STOCK INDICES SECTION -->
     <section class="section">
       <div class="section-inner">
         <div class="section-title">Domestic Stock Indices</div>
@@ -112,18 +117,29 @@
           <div class="chart-block">
             <div class="rowhead">
               <div class="chart-label">S&amp;P 500</div>
-              <div class="quote">
-                <!-- TradingView Single Ticker (US500) -->
-                <iframe
-                  src="https://www.tradingview.com/widgetembed/?frameElementId=tv_ticker_sp&symbol=US500&interval=1&hidetoptoolbar=1&symboledit=0&saveimage=0&toolbarbg=f1f3f6&theme=light&style=1"
-                  loading="lazy"
-                  allowfullscreen
-                ></iframe>
+              <div class="ticker-wrap">
+                <div class="tradingview-widget-container">
+                  <script
+                    type="text/javascript"
+                    src="https://s3.tradingview.com/external-embedding/embed-widget-ticker-tape.js"
+                    async
+                  >
+                    {
+                      "symbols": [{"proName": "TVC:US500", "title": "US500"}],
+                      "showSymbolLogo": false,
+                      "isTransparent": true,
+                      "displayMode": "regular",
+                      "colorTheme": "light",
+                      "locale": "en"
+                    }
+                  </script>
+                </div>
               </div>
             </div>
+
             <div class="chart-frame">
               <iframe
-                src="https://www.tradingview.com/widgetembed/?symbol=US500&interval=30&theme=light&withdateranges=1&hideideas=1"
+                src="https://www.tradingview.com/widgetembed/?symbol=TVC%3AUS500&interval=30&theme=light&withdateranges=1&hideideas=1"
                 loading="lazy"
                 allowfullscreen
               ></iframe>
@@ -134,17 +150,29 @@
           <div class="chart-block">
             <div class="rowhead">
               <div class="chart-label">Dow Jones</div>
-              <div class="quote">
-                <iframe
-                  src="https://www.tradingview.com/widgetembed/?frameElementId=tv_ticker_dow&symbol=US30&interval=1&hidetoptoolbar=1&symboledit=0&saveimage=0&toolbarbg=f1f3f6&theme=light&style=1"
-                  loading="lazy"
-                  allowfullscreen
-                ></iframe>
+              <div class="ticker-wrap">
+                <div class="tradingview-widget-container">
+                  <script
+                    type="text/javascript"
+                    src="https://s3.tradingview.com/external-embedding/embed-widget-ticker-tape.js"
+                    async
+                  >
+                    {
+                      "symbols": [{"proName": "TVC:US30", "title": "US30"}],
+                      "showSymbolLogo": false,
+                      "isTransparent": true,
+                      "displayMode": "regular",
+                      "colorTheme": "light",
+                      "locale": "en"
+                    }
+                  </script>
+                </div>
               </div>
             </div>
+
             <div class="chart-frame">
               <iframe
-                src="https://www.tradingview.com/widgetembed/?symbol=US30&interval=30&theme=light&withdateranges=1&hideideas=1"
+                src="https://www.tradingview.com/widgetembed/?symbol=TVC%3AUS30&interval=30&theme=light&withdateranges=1&hideideas=1"
                 loading="lazy"
                 allowfullscreen
               ></iframe>
@@ -155,17 +183,29 @@
           <div class="chart-block">
             <div class="rowhead">
               <div class="chart-label">Nasdaq</div>
-              <div class="quote">
-                <iframe
-                  src="https://www.tradingview.com/widgetembed/?frameElementId=tv_ticker_nas&symbol=NAS100&interval=1&hidetoptoolbar=1&symboledit=0&saveimage=0&toolbarbg=f1f3f6&theme=light&style=1"
-                  loading="lazy"
-                  allowfullscreen
-                ></iframe>
+              <div class="ticker-wrap">
+                <div class="tradingview-widget-container">
+                  <script
+                    type="text/javascript"
+                    src="https://s3.tradingview.com/external-embedding/embed-widget-ticker-tape.js"
+                    async
+                  >
+                    {
+                      "symbols": [{"proName": "TVC:NAS100", "title": "NAS100"}],
+                      "showSymbolLogo": false,
+                      "isTransparent": true,
+                      "displayMode": "regular",
+                      "colorTheme": "light",
+                      "locale": "en"
+                    }
+                  </script>
+                </div>
               </div>
             </div>
+
             <div class="chart-frame">
               <iframe
-                src="https://www.tradingview.com/widgetembed/?symbol=NAS100&interval=30&theme=light&withdateranges=1&hideideas=1"
+                src="https://www.tradingview.com/widgetembed/?symbol=TVC%3ANAS100&interval=30&theme=light&withdateranges=1&hideideas=1"
                 loading="lazy"
                 allowfullscreen
               ></iframe>
@@ -176,17 +216,29 @@
           <div class="chart-block">
             <div class="rowhead">
               <div class="chart-label">Russell 2000</div>
-              <div class="quote">
-                <iframe
-                  src="https://www.tradingview.com/widgetembed/?frameElementId=tv_ticker_r2k&symbol=US2000&interval=1&hidetoptoolbar=1&symboledit=0&saveimage=0&toolbarbg=f1f3f6&theme=light&style=1"
-                  loading="lazy"
-                  allowfullscreen
-                ></iframe>
+              <div class="ticker-wrap">
+                <div class="tradingview-widget-container">
+                  <script
+                    type="text/javascript"
+                    src="https://s3.tradingview.com/external-embedding/embed-widget-ticker-tape.js"
+                    async
+                  >
+                    {
+                      "symbols": [{"proName": "TVC:US2000", "title": "US2000"}],
+                      "showSymbolLogo": false,
+                      "isTransparent": true,
+                      "displayMode": "regular",
+                      "colorTheme": "light",
+                      "locale": "en"
+                    }
+                  </script>
+                </div>
               </div>
             </div>
+
             <div class="chart-frame">
               <iframe
-                src="https://www.tradingview.com/widgetembed/?symbol=US2000&interval=30&theme=light&withdateranges=1&hideideas=1"
+                src="https://www.tradingview.com/widgetembed/?symbol=TVC%3AUS2000&interval=30&theme=light&withdateranges=1&hideideas=1"
                 loading="lazy"
                 allowfullscreen
               ></iframe>
