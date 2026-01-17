@@ -9,42 +9,50 @@
       body {
         margin: 0;
         font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-        background: #fafafa;
+        background: #f6f7f9;
       }
+
       header {
         padding: 16px;
+        background: white;
         border-bottom: 1px solid #ddd;
-        background: #fff;
         font-weight: 600;
+        font-size: 16px;
       }
+
       main {
         max-width: 1400px;
         margin: 0 auto;
         padding: 16px;
       }
+
       .grid {
         display: grid;
         grid-template-columns: repeat(2, minmax(0, 1fr));
         gap: 16px;
       }
+
       .card {
-        background: #fff;
+        background: white;
         border: 1px solid #ddd;
         border-radius: 12px;
         overflow: hidden;
       }
+
       .card h3 {
         margin: 0;
         padding: 10px 12px;
         font-size: 14px;
         border-bottom: 1px solid #eee;
       }
+
       iframe {
         width: 100%;
         height: 450px;
         border: 0;
         display: block;
       }
+
       @media (max-width: 900px) {
         .grid {
           grid-template-columns: 1fr;
@@ -62,36 +70,36 @@
     <main>
       <div class="grid">
         <div class="card">
-          <h3>SPX</h3>
+          <h3>S&amp;P 500</h3>
           <iframe
-            src="https://www.tradingview.com/widgetembed/?symbol=SP%3ASPX&interval=30&hidesidetoolbar=0&symboledit=1&saveimage=0&toolbarbg=f1f3f6&studies=%5B%5D&theme=light&style=1&timezone=America%2FNew_York&withdateranges=1&hideideas=1"
+            src="https://www.tradingview.com/widgetembed/?symbol=US500&interval=30&theme=light&withdateranges=1&hideideas=1"
             loading="lazy"
             allowfullscreen
           ></iframe>
         </div>
 
         <div class="card">
-          <h3>DJI</h3>
+          <h3>Dow Jones</h3>
           <iframe
-            src="https://www.tradingview.com/widgetembed/?symbol=TVC%3ADJI&interval=30&hidesidetoolbar=0&symboledit=1&saveimage=0&toolbarbg=f1f3f6&studies=%5B%5D&theme=light&style=1&timezone=America%2FNew_York&withdateranges=1&hideideas=1"
+            src="https://www.tradingview.com/widgetembed/?symbol=US30&interval=30&theme=light&withdateranges=1&hideideas=1"
             loading="lazy"
             allowfullscreen
           ></iframe>
         </div>
 
         <div class="card">
-          <h3>WTI Crude (CL1!)</h3>
+          <h3>WTI Crude Oil</h3>
           <iframe
-            src="https://www.tradingview.com/widgetembed/?symbol=NYMEX%3ACL1%21&interval=30&hidesidetoolbar=0&symboledit=1&saveimage=0&toolbarbg=f1f3f6&studies=%5B%5D&theme=light&style=1&timezone=America%2FNew_York&withdateranges=1&hideideas=1"
+            src="https://www.tradingview.com/widgetembed/?symbol=USOIL&interval=30&theme=light&withdateranges=1&hideideas=1"
             loading="lazy"
             allowfullscreen
           ></iframe>
         </div>
 
         <div class="card">
-          <h3>Gold (GC1!)</h3>
+          <h3>Gold</h3>
           <iframe
-            src="https://www.tradingview.com/widgetembed/?symbol=COMEX%3AGC1%21&interval=30&hidesidetoolbar=0&symboledit=1&saveimage=0&toolbarbg=f1f3f6&studies=%5B%5D&theme=light&style=1&timezone=America%2FNew_York&withdateranges=1&hideideas=1"
+            src="https://www.tradingview.com/widgetembed/?symbol=XAUUSD&interval=30&theme=light&withdateranges=1&hideideas=1"
             loading="lazy"
             allowfullscreen
           ></iframe>
