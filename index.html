@@ -1,38 +1,35 @@
-<!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Futures Dashboard</title>
-    <link rel="stylesheet" href="./styles.css" />
-  </head>
+<main style="max-width:1200px;margin:0 auto;padding:16px;">
+  <div
+    style="
+      display:grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap:16px;
+    "
+  >
+    <div style="border:1px solid #ddd;border-radius:12px;overflow:hidden;">
+      <h3 style="margin:10px 12px;">SPX</h3>
+      <div id="tv_spx" style="height:450px;"></div>
+    </div>
 
-  <body>
-    <header style="padding:16px;border-bottom:1px solid #e5e5e5;">
-      <strong>Futures Dashboard</strong>
-    </header>
+    <div style="border:1px solid #ddd;border-radius:12px;overflow:hidden;">
+      <h3 style="margin:10px 12px;">DJI</h3>
+      <div id="tv_dji" style="height:450px;"></div>
+    </div>
 
-    <main style="padding:16px;display:grid;grid-template-columns:1fr;gap:16px;">
-      <div style="border:1px solid #ddd;border-radius:12px;">
-        <h3 style="margin:8px;">ES (S&P 500)</h3>
-        <div id="tv_es" style="height:500px;"></div>
-      </div>
-    </main>
+    <div style="border:1px solid #ddd;border-radius:12px;overflow:hidden;">
+      <h3 style="margin:10px 12px;">WTI Crude (CL1!)</h3>
+      <div id="tv_cl" style="height:450px;"></div>
+    </div>
 
-    <script src="https://s3.tradingview.com/tv.js"></script>
-    <script>
-      new TradingView.widget({
-        container_id: "tv_es",
-        autosize: true,
-        symbol: "CME_MINI:ES1!",
-        interval: "5",
-        timezone: "America/New_York",
-        theme: "light",
-        style: "1",
-        locale: "en",
-        withdateranges: true,
-        allow_symbol_change: true
-      });
-    </script>
-  </body>
-</html>
+    <div style="border:1px solid #ddd;border-radius:12px;overflow:hidden;">
+      <h3 style="margin:10px 12px;">Gold (GC1!)</h3>
+      <div id="tv_gc" style="height:450px;"></div>
+    </div>
+  </div>
+
+  <div style="height:16px;"></div>
+
+  <div style="color:#666;font-size:12px;text-align:center;">
+    Charts by TradingView
+  </div>
+</main>
