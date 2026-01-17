@@ -1,287 +1,175 @@
 <!doctype html>
 <html lang="en">
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Macro Dashboard</title>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Macro Dashboard</title>
 
-  <style>
-    :root{
-      --bg:#f3f4f6;            /* very light gray */
-      --card:#ffffff;
-      --border:rgba(0,0,0,.55);
-      --text:#0f172a;
-    }
+    <style>
+      body {
+        margin: 0;
+        font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+        background: #ffffff;
+        color: #111;
+      }
 
-    *{ box-sizing:border-box; }
-    body{
-      margin:0;
-      font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
-      background:var(--bg);
-      color:var(--text);
-    }
+      /* SECTION */
+      .section {
+        background: #f2f2f2; /* very light gray */
+        padding: 48px 24px 56px;
+      }
 
-    .wrap{
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 28px 18px 40px;
-    }
+      .section-inner {
+        max-width: 1400px;
+        margin: 0 auto;
+      }
 
-    .section-title{
-      text-align:center;
-      font-weight:800;
-      font-size: 32px;
-      margin: 6px 0 22px;
-      text-decoration: underline;
-      text-underline-offset: 8px;
-    }
+      .section-title {
+        text-align: center;
+        font-size: 22px;
+        font-weight: 600;
+        margin-bottom: 14px;
+        text-decoration: underline;
+        text-underline-offset: 6px;
+      }
 
-    .grid{
-      display:grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 28px 34px;
-    }
+      /* One ticker tape row */
+      .tape {
+        max-width: 980px;
+        margin: 0 auto 28px;
+        border: 1px solid #000;
+        background: #fff;
+        padding: 6px 8px;
+      }
 
-    @media (max-width: 920px){
-      .grid{ grid-template-columns: 1fr; }
-    }
+      /* GRID */
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 36px 48px;
+      }
 
-    .card{
-      background:var(--card);
-      border:1px solid rgba(0,0,0,.12);
-      border-radius: 10px;
-      padding: 14px 14px 12px;
-      box-shadow: 0 1px 0 rgba(0,0,0,.04);
-    }
+      .chart-block {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+      }
 
-    .card-head{
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap: 12px;
-      margin-bottom: 10px;
-    }
+      .chart-label {
+        font-size: 18px;
+        font-weight: 500;
+        line-height: 1.1;
+      }
 
-    .label{
-      font-size: 28px;
-      font-weight: 500;
-      line-height:1.1;
-      white-space:nowrap;
-    }
+      .chart-frame {
+        background: #ffffff;
+        border: 1px solid #000;
+        height: 360px;
+      }
 
-    /* small “ticker box” */
-    .quote-box{
-      width: 260px;
-      height: 44px;
-      border:1px solid var(--border);
-      border-radius: 3px;
-      overflow:hidden;
-      background:#fff;
-      flex: 0 0 auto;
-    }
+      iframe {
+        width: 100%;
+        height: 100%;
+        border: 0;
+        display: block;
+      }
 
-    /* chart frame */
-    .chart-box{
-      height: 360px;
-      border:1px solid var(--border);
-      border-radius: 3px;
-      overflow:hidden;
-      background:#fff;
-    }
+      @media (max-width: 900px) {
+        .grid {
+          grid-template-columns: 1fr;
+          gap: 32px;
+        }
+        .chart-frame {
+          height: 420px;
+        }
+        .tape {
+          max-width: 100%;
+        }
+      }
+    </style>
+  </head>
 
-    .tradingview-widget-container,
-    .tradingview-widget-container__widget{
-      width:100%;
-      height:100%;
-    }
-  </style>
-</head>
+  <body>
+    <section class="section">
+      <div class="section-inner">
+        <div class="section-title">Domestic Stock Indices</div>
 
-<body>
-  <div class="wrap">
-    <div class="section-title">Domestic Stock Indices</div>
-
-    <div class="grid">
-
-      <!-- S&P 500 -->
-      <div class="card">
-        <div class="card-head">
-          <div class="label">S&amp;P 500</div>
-
-          <!-- Live price (Single Quote) -->
-          <div class="quote-box">
-            <div class="tradingview-widget-container">
-              <div class="tradingview-widget-container__widget"></div>
-              <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-single-quote.js" async>
+        <!-- ONE ticker tape (reliable) -->
+        <div class="tape">
+          <div class="tradingview-widget-container">
+            <div class="tradingview-widget-container__widget"></div>
+            <script
+              type="text/javascript"
+              src="https://s3.tradingview.com/external-embedding/embed-widget-ticker-tape.js"
+              async
+            >
               {
-                "symbol": "CAPITALCOM:US500",
-                "width": "100%",
+                "symbols": [
+                  {"proName": "US500", "title": "S&P 500"},
+                  {"proName": "US30", "title": "Dow"},
+                  {"proName": "NAS100", "title": "Nasdaq"},
+                  {"proName": "US2000", "title": "Russell 2000"}
+                ],
+                "showSymbolLogo": false,
                 "isTransparent": true,
+                "displayMode": "regular",
                 "colorTheme": "light",
                 "locale": "en"
               }
-              </script>
-            </div>
-          </div>
-        </div>
-
-        <!-- Chart -->
-        <div class="chart-box">
-          <div class="tradingview-widget-container">
-            <div class="tradingview-widget-container__widget"></div>
-            <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-advanced-chart.js" async>
-            {
-              "autosize": true,
-              "symbol": "CAPITALCOM:US500",
-              "interval": "30",
-              "timezone": "Etc/UTC",
-              "theme": "light",
-              "style": "1",
-              "locale": "en",
-              "enable_publishing": false,
-              "hide_legend": true,
-              "allow_symbol_change": false,
-              "hide_top_toolbar": false,
-              "save_image": false
-            }
             </script>
           </div>
         </div>
-      </div>
 
-      <!-- Dow Jones -->
-      <div class="card">
-        <div class="card-head">
-          <div class="label">Dow Jones</div>
+        <div class="grid">
+          <!-- S&P 500 -->
+          <div class="chart-block">
+            <div class="chart-label">S&amp;P 500</div>
+            <div class="chart-frame">
+              <iframe
+                src="https://www.tradingview.com/widgetembed/?symbol=US500&interval=30&theme=light&withdateranges=1&hideideas=1"
+                loading="lazy"
+                allowfullscreen
+              ></iframe>
+            </div>
+          </div>
 
-          <div class="quote-box">
-            <div class="tradingview-widget-container">
-              <div class="tradingview-widget-container__widget"></div>
-              <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-single-quote.js" async>
-              {
-                "symbol": "FX:US30",
-                "width": "100%",
-                "isTransparent": true,
-                "colorTheme": "light",
-                "locale": "en"
-              }
-              </script>
+          <!-- Dow -->
+          <div class="chart-block">
+            <div class="chart-label">Dow Jones</div>
+            <div class="chart-frame">
+              <iframe
+                src="https://www.tradingview.com/widgetembed/?symbol=US30&interval=30&theme=light&withdateranges=1&hideideas=1"
+                loading="lazy"
+                allowfullscreen
+              ></iframe>
+            </div>
+          </div>
+
+          <!-- Nasdaq -->
+          <div class="chart-block">
+            <div class="chart-label">Nasdaq</div>
+            <div class="chart-frame">
+              <iframe
+                src="https://www.tradingview.com/widgetembed/?symbol=NAS100&interval=30&theme=light&withdateranges=1&hideideas=1"
+                loading="lazy"
+                allowfullscreen
+              ></iframe>
+            </div>
+          </div>
+
+          <!-- Russell 2000 -->
+          <div class="chart-block">
+            <div class="chart-label">Russell 2000</div>
+            <div class="chart-frame">
+              <iframe
+                src="https://www.tradingview.com/widgetembed/?symbol=US2000&interval=30&theme=light&withdateranges=1&hideideas=1"
+                loading="lazy"
+                allowfullscreen
+              ></iframe>
             </div>
           </div>
         </div>
-
-        <div class="chart-box">
-          <div class="tradingview-widget-container">
-            <div class="tradingview-widget-container__widget"></div>
-            <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-advanced-chart.js" async>
-            {
-              "autosize": true,
-              "symbol": "FX:US30",
-              "interval": "30",
-              "timezone": "Etc/UTC",
-              "theme": "light",
-              "style": "1",
-              "locale": "en",
-              "enable_publishing": false,
-              "hide_legend": true,
-              "allow_symbol_change": false,
-              "hide_top_toolbar": false,
-              "save_image": false
-            }
-            </script>
-          </div>
-        </div>
       </div>
-
-      <!-- Nasdaq 100 -->
-      <div class="card">
-        <div class="card-head">
-          <div class="label">Nasdaq</div>
-
-          <div class="quote-box">
-            <div class="tradingview-widget-container">
-              <div class="tradingview-widget-container__widget"></div>
-              <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-single-quote.js" async>
-              {
-                "symbol": "FX:NAS100",
-                "width": "100%",
-                "isTransparent": true,
-                "colorTheme": "light",
-                "locale": "en"
-              }
-              </script>
-            </div>
-          </div>
-        </div>
-
-        <div class="chart-box">
-          <div class="tradingview-widget-container">
-            <div class="tradingview-widget-container__widget"></div>
-            <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-advanced-chart.js" async>
-            {
-              "autosize": true,
-              "symbol": "FX:NAS100",
-              "interval": "30",
-              "timezone": "Etc/UTC",
-              "theme": "light",
-              "style": "1",
-              "locale": "en",
-              "enable_publishing": false,
-              "hide_legend": true,
-              "allow_symbol_change": false,
-              "hide_top_toolbar": false,
-              "save_image": false
-            }
-            </script>
-          </div>
-        </div>
-      </div>
-
-      <!-- Russell 2000 -->
-      <div class="card">
-        <div class="card-head">
-          <div class="label">Russell 2000</div>
-
-          <div class="quote-box">
-            <div class="tradingview-widget-container">
-              <div class="tradingview-widget-container__widget"></div>
-              <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-single-quote.js" async>
-              {
-                "symbol": "FOREXCOM:US2000",
-                "width": "100%",
-                "isTransparent": true,
-                "colorTheme": "light",
-                "locale": "en"
-              }
-              </script>
-            </div>
-          </div>
-        </div>
-
-        <div class="chart-box">
-          <div class="tradingview-widget-container">
-            <div class="tradingview-widget-container__widget"></div>
-            <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-advanced-chart.js" async>
-            {
-              "autosize": true,
-              "symbol": "FOREXCOM:US2000",
-              "interval": "30",
-              "timezone": "Etc/UTC",
-              "theme": "light",
-              "style": "1",
-              "locale": "en",
-              "enable_publishing": false,
-              "hide_legend": true,
-              "allow_symbol_change": false,
-              "hide_top_toolbar": false,
-              "save_image": false
-            }
-            </script>
-          </div>
-        </div>
-      </div>
-
-    </div>
-  </div>
-</body>
+    </section>
+  </body>
 </html>
