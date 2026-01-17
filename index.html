@@ -1,35 +1,114 @@
-<main style="max-width:1200px;margin:0 auto;padding:16px;">
-  <div
-    style="
-      display:grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap:16px;
-    "
-  >
-    <div style="border:1px solid #ddd;border-radius:12px;overflow:hidden;">
-      <h3 style="margin:10px 12px;">SPX</h3>
-      <div id="tv_spx" style="height:450px;"></div>
-    </div>
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Macro Dashboard</title>
 
-    <div style="border:1px solid #ddd;border-radius:12px;overflow:hidden;">
-      <h3 style="margin:10px 12px;">DJI</h3>
-      <div id="tv_dji" style="height:450px;"></div>
-    </div>
+    <style>
+      body {
+        margin: 0;
+        font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+        background: #fafafa;
+      }
 
-    <div style="border:1px solid #ddd;border-radius:12px;overflow:hidden;">
-      <h3 style="margin:10px 12px;">WTI Crude (CL1!)</h3>
-      <div id="tv_cl" style="height:450px;"></div>
-    </div>
+      header {
+        padding: 16px;
+        border-bottom: 1px solid #ddd;
+        background: white;
+        font-weight: 600;
+      }
 
-    <div style="border:1px solid #ddd;border-radius:12px;overflow:hidden;">
-      <h3 style="margin:10px 12px;">Gold (GC1!)</h3>
-      <div id="tv_gc" style="height:450px;"></div>
-    </div>
-  </div>
+      main {
+        max-width: 1400px;
+        margin: 0 auto;
+        padding: 16px;
+      }
 
-  <div style="height:16px;"></div>
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 16px;
+      }
 
-  <div style="color:#666;font-size:12px;text-align:center;">
-    Charts by TradingView
-  </div>
-</main>
+      .card {
+        background: white;
+        border: 1px solid #ddd;
+        border-radius: 12px;
+        overflow: hidden;
+      }
+
+      .card h3 {
+        margin: 0;
+        padding: 10px 12px;
+        font-size: 14px;
+        border-bottom: 1px solid #eee;
+      }
+
+      .chart {
+        height: 450px;
+      }
+
+      @media (max-width: 900px) {
+        .grid {
+          grid-template-columns: 1fr;
+        }
+        .chart {
+          height: 500px;
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <header>Macro Dashboard</header>
+
+    <main>
+      <div class="grid">
+        <div class="card">
+          <h3>SPX</h3>
+          <div id="tv_spx" class="chart"></div>
+        </div>
+
+        <div class="card">
+          <h3>DJI</h3>
+          <div id="tv_dji" class="chart"></div>
+        </div>
+
+        <div class="card">
+          <h3>WTI Crude (CL1!)</h3>
+          <div id="tv_cl" class="chart"></div>
+        </div>
+
+        <div class="card">
+          <h3>Gold (GC1!)</h3>
+          <div id="tv_gc" class="chart"></div>
+        </div>
+      </div>
+    </main>
+
+    <script src="https://s3.tradingview.com/tv.js"></script>
+    <script>
+      function loadChart(id, symbol) {
+        new TradingView.widget({
+          container_id: id,
+          autosize: true,
+          symbol: symbol,
+          interval: "30",
+          timezone: "America/New_York",
+          theme: "light",
+          style: "1",
+          locale: "en",
+          withdateranges: true,
+          allow_symbol_change: true
+        });
+      }
+
+      loadChart("tv_spx", "SPX");
+      loadChart("tv_dji", "TVC:DJI");
+      loadChart("tv_cl", "NYMEX:CL1!");
+      loadChart("tv_gc", "COMEX:GC1!");
+    </script>
+  </body>
+</html>
+
