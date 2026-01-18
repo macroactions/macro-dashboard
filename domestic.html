@@ -3,116 +3,229 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Macro Dashboard</title>
+    <title>Macro Dashboard — Equity Indices</title>
 
     <style>
-      body {
-        margin: 0;
-        font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-        background: #ffffff;
-        color: #111;
+      :root{
+        --page-bg:#ffffff;
+        --section-bg:#f2f2f2;
+        --card-bg:#ffffff;
+        --soft-bg:#f6f7f9;
+        --border:rgba(0,0,0,.14);
+        --border-strong:rgba(0,0,0,.22);
+        --text:#111;
+        --muted:rgba(0,0,0,.62);
+        --radius-lg:18px;
+        --radius-md:14px;
+        --shadow:0 1px 0 rgba(0,0,0,.04);
+      }
+
+      *{ box-sizing:border-box; }
+
+      body{
+        margin:0;
+        font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+        background:var(--page-bg);
+        color:var(--text);
+      }
+
+      /* Top navigation (matches your home screenshot style) */
+      .topbar{
+        position:sticky;
+        top:0;
+        z-index:10;
+        background:rgba(255,255,255,.92);
+        backdrop-filter:blur(10px);
+        border-bottom:1px solid var(--border);
+      }
+      .topbar-inner{
+        max-width:1400px;
+        margin:0 auto;
+        padding:12px 18px;
+        display:flex;
+        align-items:center;
+        justify-content:space-between;
+        gap:12px;
+      }
+      .brand{
+        font-weight:800;
+        letter-spacing:.2px;
+      }
+      .nav{
+        display:flex;
+        gap:8px;
+        flex-wrap:wrap;
+        justify-content:flex-end;
+      }
+      .nav a{
+        text-decoration:none;
+        color:var(--text);
+        font-weight:700;
+        font-size:13px;
+        padding:8px 12px;
+        border-radius:999px;
+        border:1px solid transparent;
+      }
+      .nav a:hover,
+      .nav a.active{
+        border-color:var(--border);
+        background:var(--soft-bg);
       }
 
       /* SECTION */
-      .section {
-        background: #f2f2f2; /* very light gray */
-        padding: 48px 24px 56px;
+      .section{
+        background:var(--section-bg);
+        padding:48px 24px 56px;
+      }
+      .section-inner{
+        max-width:1400px;
+        margin:0 auto;
       }
 
-      .section-inner {
-        max-width: 1400px;
-        margin: 0 auto;
-      }
-
-      /* ✅ remove underline + make a bit more modern */
-      .section-title {
-        text-align: center;
-        font-size: 28px;
-        font-weight: 800;
-        margin-bottom: 18px;
-        text-decoration: none;
-        letter-spacing: 0.2px;
+      /* Keep indices exactly the same */
+      .section-title{
+        text-align:center;
+        font-size:28px;
+        font-weight:800;
+        margin-bottom:18px;
+        text-decoration:none;
+        letter-spacing:.2px;
       }
 
       /* One ticker tape row */
-      .tape {
-        max-width: 980px;
-        margin: 0 auto 28px;
-        border: 1px solid rgba(0, 0, 0, 0.14);
-        background: #fff;
-        padding: 10px 12px;
-        border-radius: 14px;             /* ✅ smooth edges */
-        box-shadow: 0 1px 0 rgba(0,0,0,.04);
+      .tape{
+        max-width:980px;
+        margin:0 auto 28px;
+        border:1px solid var(--border);
+        background:#fff;
+        padding:10px 12px;
+        border-radius:14px;
+        box-shadow:var(--shadow);
       }
 
       /* GRID */
-      .grid {
-        display: grid;
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-        gap: 36px 48px;
+      .grid{
+        display:grid;
+        grid-template-columns:repeat(2, minmax(0, 1fr));
+        gap:36px 48px;
       }
 
-      .chart-block {
-        display: flex;
-        flex-direction: column;
-        gap: 10px;
+      .chart-block{
+        display:flex;
+        flex-direction:column;
+        gap:10px;
       }
 
-      /* ✅ label pill: offwhite background, bigger + bolder */
-      .chart-label {
-        display: inline-flex;
-        align-self: flex-start;
-        background: #f6f7f9;             /* offwhite-like */
-        border: 1px solid rgba(0, 0, 0, 0.12);
-        border-radius: 14px;             /* smooth edges */
-        padding: 10px 14px;
-        font-size: 20px;                 /* bigger */
-        font-weight: 800;                /* bolder */
-        line-height: 1.1;
-        box-shadow: 0 1px 0 rgba(0,0,0,.03);
+      /* label pill */
+      .chart-label{
+        display:inline-flex;
+        align-self:flex-start;
+        background:var(--soft-bg);
+        border:1px solid rgba(0,0,0,.12);
+        border-radius:14px;
+        padding:10px 14px;
+        font-size:20px;
+        font-weight:800;
+        line-height:1.1;
+        box-shadow:0 1px 0 rgba(0,0,0,.03);
       }
 
-      /* ✅ rounded chart containers */
-      .chart-frame {
-        background: #ffffff;
-        border: 1px solid rgba(0, 0, 0, 0.14);
-        height: 360px;
-        border-radius: 18px;             /* smooth edges */
-        overflow: hidden;                /* keep iframe corners rounded */
-        box-shadow: 0 1px 0 rgba(0,0,0,.04);
+      /* rounded chart containers */
+      .chart-frame{
+        background:#ffffff;
+        border:1px solid var(--border);
+        height:360px;
+        border-radius:18px;
+        overflow:hidden;
+        box-shadow:var(--shadow);
       }
 
-      iframe {
-        width: 100%;
-        height: 100%;
-        border: 0;
-        display: block;
+      iframe{
+        width:100%;
+        height:100%;
+        border:0;
+        display:block;
       }
 
-      @media (max-width: 900px) {
-        .grid {
-          grid-template-columns: 1fr;
-          gap: 32px;
+      /* --- Mag 7 section (added BELOW indices) --- */
+      .subsection-title{
+        margin:42px 0 14px;
+        font-size:18px;
+        font-weight:900;
+        letter-spacing:.2px;
+      }
+
+      .mag7-card{
+        max-width:980px;
+        margin:0 auto;
+        background:#fff;
+        border:1px solid var(--border);
+        border-radius:18px;
+        overflow:hidden;
+        box-shadow:var(--shadow);
+      }
+
+      .mag7-head{
+        display:flex;
+        align-items:center;
+        justify-content:space-between;
+        gap:12px;
+        padding:12px 14px;
+        border-bottom:1px solid rgba(0,0,0,.08);
+        background:rgba(0,0,0,.015);
+      }
+
+      .mag7-title{
+        font-size:14px;
+        font-weight:900;
+        letter-spacing:.2px;
+      }
+
+      .mag7-sub{
+        font-size:12px;
+        color:var(--muted);
+        font-weight:650;
+        white-space:nowrap;
+      }
+
+      .mag7-body{
+        padding:8px 10px 10px;
+      }
+
+      @media (max-width: 900px){
+        .grid{
+          grid-template-columns:1fr;
+          gap:32px;
         }
-        .chart-frame {
-          height: 420px;
-        }
-        .tape {
-          max-width: 100%;
-        }
-        .section-title {
-          font-size: 26px;
-        }
+        .chart-frame{ height:420px; }
+        .tape, .mag7-card{ max-width:100%; }
+        .section-title{ font-size:26px; }
+        .mag7-sub{ display:none; }
       }
     </style>
   </head>
 
   <body>
+    <!-- ✅ Banner / Tabs (as in your screenshot) -->
+    <div class="topbar">
+      <div class="topbar-inner">
+        <div class="brand">Macro Dashboard</div>
+        <div class="nav">
+          <a href="index.html">Home</a>
+          <a class="active" href="domestic.html">Equity Indices</a>
+          <a href="yields.html">Fixed Income</a>
+          <a href="events.html">Event Markets</a>
+          <a href="commodities.html">Commodities</a>
+          <a href="news.html">Live News</a>
+        </div>
+      </div>
+    </div>
+
     <section class="section">
       <div class="section-inner">
         <div class="section-title">Domestic Stock Indices</div>
 
-        <!-- ONE ticker tape (reliable) -->
+        <!-- ONE ticker tape (unchanged) -->
         <div class="tape">
           <div class="tradingview-widget-container">
             <div class="tradingview-widget-container__widget"></div>
@@ -138,6 +251,7 @@
           </div>
         </div>
 
+        <!-- Indices grid (unchanged) -->
         <div class="grid">
           <!-- S&P 500 -->
           <div class="chart-block">
@@ -187,6 +301,50 @@
             </div>
           </div>
         </div>
+
+        <!-- ✅ Mag 7 section added BELOW indices -->
+        <div class="subsection-title">Magnificent 7</div>
+
+        <div class="mag7-card">
+          <div class="mag7-head">
+            <div class="mag7-title">Daily % Change</div>
+            <div class="mag7-sub">auto-colored gainers/losers • TradingView quotes</div>
+          </div>
+          <div class="mag7-body">
+            <div class="tradingview-widget-container" style="width:100%;">
+              <div class="tradingview-widget-container__widget"></div>
+              <script
+                type="text/javascript"
+                src="https://s3.tradingview.com/external-embedding/embed-widget-market-quotes.js"
+                async
+              >
+                {
+                  "width": "100%",
+                  "height": 420,
+                  "symbolsGroups": [
+                    {
+                      "name": "Magnificent 7",
+                      "symbols": [
+                        {"name": "NASDAQ:AAPL", "displayName": "AAPL"},
+                        {"name": "NASDAQ:MSFT", "displayName": "MSFT"},
+                        {"name": "NASDAQ:AMZN", "displayName": "AMZN"},
+                        {"name": "NASDAQ:GOOGL", "displayName": "GOOGL"},
+                        {"name": "NASDAQ:META", "displayName": "META"},
+                        {"name": "NASDAQ:NVDA", "displayName": "NVDA"},
+                        {"name": "NASDAQ:TSLA", "displayName": "TSLA"}
+                      ]
+                    }
+                  ],
+                  "showSymbolLogo": true,
+                  "colorTheme": "light",
+                  "isTransparent": false,
+                  "locale": "en"
+                }
+              </script>
+            </div>
+          </div>
+        </div>
+
       </div>
     </section>
   </body>
