@@ -6,97 +6,164 @@
     <title>Macro Dashboard</title>
 
     <style>
+      :root {
+        --page-bg: #ffffff;
+        --section-bg: #f2f2f2;
+        --card-bg: #ffffff;
+        --soft-bg: #f6f7f9;
+        --border: rgba(0, 0, 0, 0.14);
+        --border-strong: rgba(0, 0, 0, 0.22);
+        --text: #111;
+        --muted: rgba(0, 0, 0, 0.62);
+        --radius-lg: 18px;
+        --radius-md: 14px;
+        --shadow: 0 1px 0 rgba(0, 0, 0, 0.04);
+      }
+
+      * { box-sizing: border-box; }
+
       body {
         margin: 0;
         font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-        background: #ffffff;
-        color: #111;
+        background: var(--page-bg);
+        color: var(--text);
       }
 
-      .section {
-        background: #f2f2f2;
-        min-height: 100vh;
-        padding: 48px 24px 56px;
+      /* Top navigation */
+      .topbar {
+        position: sticky;
+        top: 0;
+        z-index: 10;
+        background: rgba(255, 255, 255, 0.92);
+        backdrop-filter: blur(10px);
+        border-bottom: 1px solid var(--border);
       }
 
-      .section-inner {
-        max-width: 1200px;
+      .topbar-inner {
+        max-width: 1400px;
         margin: 0 auto;
+        padding: 12px 18px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
       }
 
-      .title {
-        text-align: center;
-        font-size: 34px;
+      .brand {
         font-weight: 800;
-        margin: 0 0 10px;
         letter-spacing: 0.2px;
       }
 
-      .subtitle {
-        text-align: center;
-        font-size: 14px;
-        color: rgba(0, 0, 0, 0.6);
-        margin: 0 0 28px;
+      .nav {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+        justify-content: flex-end;
       }
 
-      .grid {
+      .nav a {
+        text-decoration: none;
+        color: var(--text);
+        font-size: 13px;
+        font-weight: 700;
+        padding: 8px 12px;
+        border-radius: 999px;
+        border: 1px solid transparent;
+      }
+
+      .nav a:hover,
+      .nav a.active {
+        background: var(--soft-bg);
+        border-color: var(--border);
+      }
+
+      /* Section */
+      .section {
+        background: var(--section-bg);
+        padding: 44px 18px 64px;
+      }
+
+      .section-inner {
+        max-width: 1400px;
+        margin: 0 auto;
+      }
+
+      .page-title {
+        text-align: center;
+        font-size: 30px;
+        font-weight: 900;
+        margin: 10px 0 6px;
+        letter-spacing: -0.2px;
+      }
+
+      .page-subtitle {
+        text-align: center;
+        font-size: 13px;
+        color: var(--muted);
+        margin: 0 0 28px;
+        font-weight: 650;
+      }
+
+      /* Tiles */
+      .tiles {
         display: grid;
         grid-template-columns: repeat(2, minmax(0, 1fr));
         gap: 18px;
       }
 
       @media (max-width: 900px) {
-        .grid {
+        .tiles {
           grid-template-columns: 1fr;
         }
       }
 
-      .card {
-        display: block;
+      .tile {
+        background: var(--card-bg);
+        border: 1px solid var(--border);
+        border-radius: var(--radius-lg);
+        box-shadow: var(--shadow);
+        padding: 18px;
         text-decoration: none;
-        color: inherit;
-        background: #ffffff;
-        border: 1px solid rgba(0, 0, 0, 0.14);
-        border-radius: 18px;
-        padding: 18px 18px;
-        box-shadow: 0 1px 0 rgba(0, 0, 0, 0.04);
-        transition: transform 120ms ease, box-shadow 120ms ease;
+        color: var(--text);
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        transition: transform 120ms ease, border-color 120ms ease;
       }
 
-      .card:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.06);
+      .tile:hover {
+        transform: translateY(-1px);
+        border-color: var(--border-strong);
       }
 
-      .card-title {
+      .tile-title {
         font-size: 18px;
-        font-weight: 800;
-        margin: 0 0 6px;
-      }
-
-      .card-desc {
-        font-size: 13px;
-        margin: 0;
-        color: rgba(0, 0, 0, 0.65);
-        line-height: 1.4;
-      }
-
-      .pill {
-        display: inline-flex;
-        align-items: center;
-        gap: 8px;
-        margin-top: 12px;
-        padding: 8px 12px;
-        font-size: 12px;
-        font-weight: 800;
-        background: #f6f7f9;
+        font-weight: 900;
+        letter-spacing: -0.1px;
+        background: var(--soft-bg);
         border: 1px solid rgba(0, 0, 0, 0.12);
-        border-radius: 999px;
+        border-radius: var(--radius-md);
+        padding: 10px 12px;
+        width: fit-content;
+      }
+
+      .tile-desc {
+        font-size: 13px;
+        color: var(--muted);
+        font-weight: 650;
+        line-height: 1.35;
+      }
+
+      .tile-meta {
+        margin-top: 4px;
+        font-size: 12px;
+        color: rgba(0, 0, 0, 0.52);
+        font-weight: 700;
       }
 
       .footer {
         text-align: center;
-        margin-top: 24px;
+        margin-top: 26px;
         font-size: 12px;
         color: rgba(0, 0, 0, 0.55);
       }
@@ -104,62 +171,51 @@
   </head>
 
   <body>
+    <div class="topbar">
+      <div class="topbar-inner">
+        <div class="brand">Macro Dashboard</div>
+        <div class="nav">
+          <a class="active" href="index.html">Home</a>
+          <a href="domestic.html">Domestic</a>
+          <a href="events.html">Event Markets</a>
+          <a href="yields.html">Yields</a>
+          <a href="news.html">Live News</a>
+        </div>
+      </div>
+    </div>
+
     <section class="section">
       <div class="section-inner">
-        <h1 class="title">Macro Dashboard</h1>
-        <p class="subtitle">Quick links to market sections</p>
+        <div class="page-title">Home</div>
+        <div class="page-subtitle">Quick access to your core dashboards.</div>
 
-        <div class="grid">
-          <a class="card" href="domestic.html">
-            <div class="card-title">Domestic Stock Indices</div>
-            <p class="card-desc">S&amp;P 500, Dow Jones, Nasdaq, Russell 2000</p>
-            <div class="pill">Open section →</div>
+        <div class="tiles">
+          <a class="tile" href="domestic.html">
+            <div class="tile-title">Domestic</div>
+            <div class="tile-desc">US stock indices and key domestic market snapshots.</div>
+            <div class="tile-meta">Charts + ticker tape</div>
           </a>
 
-          <a class="card" href="events.html">
-            <div class="card-title">Event Markets</div>
-            <p class="card-desc">Kalshi + Polymarket markets focused on USG policy, macro, and geopolitics</p>
-            <div class="pill">Open section →</div>
+          <a class="tile" href="yields.html">
+            <div class="tile-title">Yields</div>
+            <div class="tile-desc">Yield curves with live tables (US + Euro Area) and expansion to Japan/China.</div>
+            <div class="tile-meta">Curve + table</div>
           </a>
 
-          <a class="card" href="news.html">
-            <div class="card-title">Live News</div>
-            <p class="card-desc">Twitter/X feeds + curated headlines (policy, markets, foreign affairs)</p>
-            <div class="pill">Open section →</div>
+          <a class="tile" href="events.html">
+            <div class="tile-title">Event Markets</div>
+            <div class="tile-desc">Curated Kalshi event markets for policy, macro, and governance monitoring.</div>
+            <div class="tile-meta">Embedded markets</div>
           </a>
 
-          <a class="card" href="commodities.html">
-            <div class="card-title">Commodities</div>
-            <p class="card-desc">Energy, metals, agriculture</p>
-            <div class="pill">Open section →</div>
-          </a>
-
-          <a class="card" href="rates.html">
-            <div class="card-title">Rates</div>
-            <p class="card-desc">Treasuries, curves, policy expectations</p>
-            <div class="pill">Open section →</div>
-          </a>
-
-          <a class="card" href="fx.html">
-            <div class="card-title">FX</div>
-            <p class="card-desc">Dollar, majors, crosses</p>
-            <div class="pill">Open section →</div>
-          </a>
-
-          <a class="card" href="crypto.html">
-            <div class="card-title">Crypto</div>
-            <p class="card-desc">BTC, ETH, majors, risk sentiment</p>
-            <div class="pill">Open section →</div>
-          </a>
-
-          <a class="card" href="global.html">
-            <div class="card-title">Global Equities</div>
-            <p class="card-desc">Major international indices &amp; regional benchmarks</p>
-            <div class="pill">Open section →</div>
+          <a class="tile" href="news.html">
+            <div class="tile-title">Live News</div>
+            <div class="tile-desc">Headlines and live feeds (we’ll build this next).</div>
+            <div class="tile-meta">News + social</div>
           </a>
         </div>
 
-        <div class="footer">Built on GitHub Pages • Embeds load from their respective providers</div>
+        <div class="footer">Static site • GitHub Pages</div>
       </div>
     </section>
   </body>
