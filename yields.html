@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Macro Dashboard — Yields</title>
+    <title>Macro Dashboard — Fixed Income</title>
 
     <style>
       :root {
@@ -72,7 +72,6 @@
         max-width: 1400px;
         margin: 0 auto;
       }
-
       .page-title {
         text-align: center;
         font-size: 28px;
@@ -86,21 +85,6 @@
         color: var(--muted);
         font-size: 13px;
         font-weight: 650;
-      }
-
-      /* Layout */
-      .row {
-        display: grid;
-        grid-template-columns: 1fr;
-        gap: 18px;
-      }
-      .grid2 {
-        display: grid;
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-        gap: 18px;
-      }
-      @media (max-width: 980px) {
-        .grid2 { grid-template-columns: 1fr; }
       }
 
       /* Cards */
@@ -137,22 +121,40 @@
         white-space: nowrap;
       }
 
-      /* Curve embed */
-      .embed {
+      /* Curve panel (native SVG) */
+      .curve {
         border: 1px solid var(--border-strong);
         border-radius: var(--radius-lg);
         overflow: hidden;
         background: #fff;
-        height: 520px;
       }
-      iframe {
+      .curve-top {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        padding: 10px 12px;
+        background: rgba(0, 0, 0, 0.02);
+        border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+      }
+      .curve-title {
+        font-weight: 950;
+        font-size: 13px;
+        letter-spacing: 0.15px;
+      }
+      .curve-date {
+        font-weight: 850;
+        font-size: 12px;
+        color: rgba(0, 0, 0, 0.6);
+        white-space: nowrap;
+      }
+      svg {
         width: 100%;
-        height: 100%;
-        border: 0;
+        height: 360px;
         display: block;
       }
 
-      /* Bottom-row strip */
+      /* Yield strip (more “terminal” / modern) */
       .strip {
         margin-top: 12px;
         border: 1px solid rgba(0,0,0,0.12);
@@ -170,39 +172,67 @@
         border-bottom: 1px solid rgba(0,0,0,0.08);
       }
       .strip-title {
-        font-weight: 900;
+        font-weight: 950;
         font-size: 13px;
-        letter-spacing: 0.2px;
+        letter-spacing: 0.15px;
       }
       .strip-date {
-        font-weight: 800;
+        font-weight: 850;
         font-size: 12px;
         color: rgba(0,0,0,0.6);
         white-space: nowrap;
       }
+
       .chips {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 8px;
+        display: grid;
+        grid-template-columns: repeat(6, minmax(0, 1fr));
+        gap: 10px;
         padding: 12px;
       }
+      @media (max-width: 1100px) { .chips { grid-template-columns: repeat(4, 1fr); } }
+      @media (max-width: 760px)  { .chips { grid-template-columns: repeat(2, 1fr); } }
+
       .chip {
-        display: inline-flex;
-        align-items: center;
-        gap: 8px;
-        padding: 8px 10px;
-        border-radius: 999px;
-        background: var(--soft-bg);
-        border: 1px solid rgba(0,0,0,0.12);
-        font-weight: 900;
+        border-radius: 14px;
+        background: linear-gradient(180deg, #ffffff 0%, #fafafa 100%);
+        border: 1px solid rgba(0,0,0,0.10);
+        padding: 10px 10px;
+        box-shadow: 0 1px 0 rgba(0,0,0,0.03);
+        display: flex;
+        align-items: baseline;
+        justify-content: space-between;
+        gap: 10px;
+        font-variant-numeric: tabular-nums;
+      }
+      .chip-left {
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+        min-width: 0;
+      }
+      .chip-mat {
         font-size: 12px;
+        font-weight: 900;
+        color: rgba(0,0,0,0.65);
         letter-spacing: 0.2px;
+      }
+      .chip-yld {
+        font-size: 16px;
+        font-weight: 950;
+        letter-spacing: -0.2px;
+      }
+      .chip-delta {
+        font-size: 12px;
+        font-weight: 900;
+        padding: 6px 8px;
+        border-radius: 999px;
+        border: 1px solid rgba(0,0,0,0.10);
+        background: var(--soft-bg);
         white-space: nowrap;
       }
-      .chip span {
-        color: rgba(0,0,0,0.6);
-        font-weight: 900;
-      }
+      .up   { color: #0b6b2f; border-color: rgba(11,107,47,0.18); background: rgba(11,107,47,0.06); }
+      .down { color: #8b0000; border-color: rgba(139,0,0,0.18); background: rgba(139,0,0,0.06); }
+      .flat { color: rgba(0,0,0,0.55); }
 
       .note {
         margin-top: 10px;
@@ -211,7 +241,6 @@
         font-weight: 650;
       }
       .note a { color: inherit; }
-
       .warn {
         margin-top: 10px;
         padding: 10px 12px;
@@ -244,131 +273,300 @@
         <div class="page-title">Fixed Income</div>
         <div class="page-subtitle">US Treasury yield curve + latest daily yield curve row</div>
 
-        <div class="row">
-          <div class="card">
-            <div class="card-head">
-              <div class="label">United States — Treasuries</div>
-              <div class="meta" id="us-meta">Loading…</div>
-            </div>
+        <div class="card">
+          <div class="card-head">
+            <div class="label">United States — Treasuries</div>
+            <div class="meta" id="meta-latest">Loading…</div>
+          </div>
 
-            <!-- Yield curve visual embed -->
-            <div class="embed">
-              <iframe
-                src="https://www.ustreasuryyieldcurve.com/"
-                loading="lazy"
-                referrerpolicy="no-referrer"
-              ></iframe>
+          <!-- Native yield curve -->
+          <div class="curve">
+            <div class="curve-top">
+              <div class="curve-title">Yield curve (from Treasury daily curve)</div>
+              <div class="curve-date" id="curve-date">—</div>
             </div>
+            <svg id="curve-svg" viewBox="0 0 1100 360" preserveAspectRatio="none"></svg>
+          </div>
 
-            <!-- Latest bottom row from Treasury CSV -->
-            <div class="strip">
-              <div class="strip-top">
-                <div class="strip-title">Daily Treasury Yield Curve Rates (latest row)</div>
-                <div class="strip-date" id="treasury-latest-date">—</div>
+          <!-- Latest row strip -->
+          <div class="strip">
+            <div class="strip-top">
+              <div class="strip-title">Daily Treasury Yield Curve Rates (latest row)</div>
+              <div class="strip-date" id="treasury-latest-date">—</div>
+            </div>
+            <div class="chips" id="treasury-chips">
+              <div class="chip">
+                <div class="chip-left">
+                  <div class="chip-mat">Loading</div>
+                  <div class="chip-yld">—</div>
+                </div>
+                <div class="chip-delta flat">—</div>
               </div>
-              <div class="chips" id="treasury-bottom-row">
-                <div class="chip"><span>Loading…</span></div>
-              </div>
             </div>
+          </div>
 
-            <div class="note">
-              Sources:
-              <a href="https://www.ustreasuryyieldcurve.com/" target="_blank" rel="noreferrer">USTreasuryYieldCurve.com</a>
-              •
-              <a
-                href="https://home.treasury.gov/resource-center/data-chart-center/interest-rates/TextView?type=daily_treasury_yield_curve&field_tdr_date_value=2026"
-                target="_blank"
-                rel="noreferrer"
-              >Treasury daily yield curve (2026)</a>
-            </div>
+          <div class="note">
+            Source:
+            <a
+              href="https://home.treasury.gov/resource-center/data-chart-center/interest-rates/TextView?type=daily_treasury_yield_curve&field_tdr_date_value=2026"
+              target="_blank"
+              rel="noreferrer"
+            >Treasury daily yield curve</a>
+          </div>
 
-            <div class="warn" id="embed-warn" style="display:none;">
-              If the curve panel appears blank, that site is blocking embedding. You can still click the source link above.
-            </div>
+          <div class="warn">
+            The curve iframe won’t embed because many sites block embedding; this page now renders the curve directly from Treasury’s latest yields (more reliable + cleaner).
           </div>
         </div>
       </div>
     </section>
 
     <script>
-      // --- Treasury "bottom row" pull ---
-      // We fetch Treasury's CSV for the year, then take the last non-empty row.
-      const TREASURY_CSV =
-        "https://home.treasury.gov/resource-center/data-chart-center/interest-rates/" +
-        "daily-treasury-rates.csv/2026/all?_format=csv&field_tdr_date_value=2026&type=daily_treasury_yield_curve";
+      // Treasury CSV for a year. We'll choose the most recent date across rows (not "top" or "bottom").
+      function csvUrlForYear(year) {
+        return (
+          "https://home.treasury.gov/resource-center/data-chart-center/interest-rates/" +
+          "daily-treasury-rates.csv/" + year + "/all?_format=csv&field_tdr_date_value=" + year +
+          "&type=daily_treasury_yield_curve"
+        );
+      }
 
-      function parseCSVLine(line) {
-        // Simple CSV splitter (Treasury CSV is straightforward; no quoted commas expected)
+      function splitCSV(line) {
+        // Treasury CSV is simple; no embedded commas in fields.
         return line.split(",").map(s => s.trim());
       }
 
-      function buildChips(headers, values) {
-        // headers includes "Date" then maturities. values same length.
-        const chips = [];
-        for (let i = 1; i < headers.length && i < values.length; i++) {
-          const h = headers[i];
-          const v = values[i];
-          if (!h || !v) continue;
-          chips.push({ m: h, y: v });
-        }
-        return chips;
+      function parseMDY(s) {
+        // "01/02/2026" -> Date
+        const m = /^(\d{2})\/(\d{2})\/(\d{4})$/.exec(s);
+        if (!m) return null;
+        const mm = Number(m[1]), dd = Number(m[2]), yy = Number(m[3]);
+        return new Date(Date.UTC(yy, mm - 1, dd));
       }
 
-      async function loadTreasuryBottomRow() {
-        const meta = document.getElementById("us-meta");
-        const dateEl = document.getElementById("treasury-latest-date");
-        const rowEl = document.getElementById("treasury-bottom-row");
+      function fmtDate(d) {
+        // back to MM/DD/YYYY
+        const mm = String(d.getUTCMonth() + 1).padStart(2, "0");
+        const dd = String(d.getUTCDate()).padStart(2, "0");
+        const yy = d.getUTCFullYear();
+        return `${mm}/${dd}/${yy}`;
+      }
+
+      function toNum(x) {
+        if (x === null || x === undefined) return null;
+        const n = Number(x);
+        return Number.isFinite(n) ? n : null;
+      }
+
+      function maturityToYears(label) {
+        // Handles: "1 Mo", "1.5 Month", "2 Mo", "3 Mo", "6 Mo", "1 Yr", "2 Yr", "3 Yr", "5 Yr", "7 Yr", "10 Yr", "20 Yr", "30 Yr"
+        const s = label.toLowerCase();
+        const num = parseFloat(s);
+        if (!Number.isFinite(num)) return null;
+        if (s.includes("mo")) return num / 12;
+        if (s.includes("month")) return num / 12;
+        if (s.includes("yr")) return num;
+        if (s.includes("year")) return num;
+        return null;
+      }
+
+      function deltaClass(d) {
+        if (d === null) return "flat";
+        if (d > 0) return "up";
+        if (d < 0) return "down";
+        return "flat";
+      }
+
+      function drawCurve(points, yMin, yMax) {
+        const svg = document.getElementById("curve-svg");
+        if (!svg) return;
+        svg.innerHTML = "";
+
+        const W = 1100, H = 360;
+        const padL = 64, padR = 22, padT = 24, padB = 52;
+
+        const xs = points.map(p => p.x);
+        const ys = points.map(p => p.y);
+        const xMin = Math.min(...xs), xMax = Math.max(...xs);
+
+        const X = (x) => padL + ((x - xMin) / (xMax - xMin)) * (W - padL - padR);
+        const Y = (y) => padT + (1 - (y - yMin) / (yMax - yMin)) * (H - padT - padB);
+
+        // grid lines
+        const grid = 4;
+        for (let i = 0; i <= grid; i++) {
+          const t = i / grid;
+          const yy = padT + t * (H - padT - padB);
+          const yVal = (yMax - t * (yMax - yMin)).toFixed(2);
+
+          svg.insertAdjacentHTML(
+            "beforeend",
+            `<line x1="${padL}" y1="${yy}" x2="${W - padR}" y2="${yy}" stroke="rgba(0,0,0,0.08)" />
+             <text x="12" y="${yy + 4}" fill="rgba(0,0,0,0.55)" font-size="12" font-weight="800">${yVal}</text>`
+          );
+        }
+
+        // x labels (use ~6 labels)
+        const labelEvery = Math.max(1, Math.floor(points.length / 6));
+        points.forEach((p, i) => {
+          if (i % labelEvery !== 0 && i !== points.length - 1) return;
+          const xx = X(p.x);
+          svg.insertAdjacentHTML(
+            "beforeend",
+            `<text x="${xx}" y="${H - 18}" text-anchor="middle" fill="rgba(0,0,0,0.55)" font-size="12" font-weight="900">${p.label}</text>`
+          );
+        });
+
+        // path
+        const d = points
+          .map((p, i) => `${i === 0 ? "M" : "L"} ${X(p.x).toFixed(2)} ${Y(p.y).toFixed(2)}`)
+          .join(" ");
+
+        svg.insertAdjacentHTML(
+          "beforeend",
+          `<path d="${d}" fill="none" stroke="rgba(0,0,0,0.88)" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" />
+           <path d="${d} L ${X(points[points.length - 1].x).toFixed(2)} ${H - padB} L ${X(points[0].x).toFixed(2)} ${H - padB} Z"
+                 fill="rgba(0,0,0,0.04)" stroke="none" />`
+        );
+
+        // dots
+        points.forEach(p => {
+          svg.insertAdjacentHTML(
+            "beforeend",
+            `<circle cx="${X(p.x).toFixed(2)}" cy="${Y(p.y).toFixed(2)}" r="3.3" fill="rgba(0,0,0,0.92)" />`
+          );
+        });
+      }
+
+      async function fetchTreasuryLatestRow() {
+        const nowYear = new Date().getFullYear();
+        const years = [nowYear, nowYear - 1]; // safety in early January
+
+        // pull both years and then choose max date across all rows
+        let allRows = [];
+        let headers = null;
+
+        for (const y of years) {
+          const url = csvUrlForYear(y);
+          const res = await fetch(url, { cache: "no-store" });
+          if (!res.ok) continue;
+
+          const text = await res.text();
+          const lines = text.trim().split(/\r?\n/);
+          if (lines.length < 2) continue;
+
+          const h = splitCSV(lines[0]);
+          if (!headers) headers = h;
+
+          for (let i = 1; i < lines.length; i++) {
+            const cols = splitCSV(lines[i]);
+            if (!cols[0]) continue;
+            const d = parseMDY(cols[0]);
+            if (!d) continue;
+            allRows.push({ date: d, cols });
+          }
+        }
+
+        if (!headers || allRows.length === 0) {
+          throw new Error("No Treasury rows found");
+        }
+
+        // pick latest by date
+        allRows.sort((a, b) => a.date - b.date);
+        const latest = allRows[allRows.length - 1];
+        const prev = allRows.length >= 2 ? allRows[allRows.length - 2] : null;
+
+        return { headers, latest, prev };
+      }
+
+      function renderChips(headers, latestCols, prevCols) {
+        const chipWrap = document.getElementById("treasury-chips");
+        chipWrap.innerHTML = "";
+
+        // Build list of maturities from headers (excluding Date)
+        const entries = [];
+        for (let i = 1; i < headers.length; i++) {
+          const mat = headers[i];
+          const y = toNum(latestCols[i]);
+          if (y === null) continue;
+
+          const py = prevCols ? toNum(prevCols[i]) : null;
+          const d = (py === null) ? null : (y - py);
+
+          entries.push({ mat, y, d, x: maturityToYears(mat) });
+        }
+
+        // sort by maturity (in years)
+        entries.sort((a, b) => (a.x ?? 999) - (b.x ?? 999));
+
+        chipWrap.innerHTML = entries.map(e => {
+          const d = e.d;
+          const cls = deltaClass(d);
+          const dTxt = d === null ? "Δ —" : `Δ ${(d > 0 ? "+" : "") + d.toFixed(2)}%`;
+          return `
+            <div class="chip">
+              <div class="chip-left">
+                <div class="chip-mat">${e.mat}</div>
+                <div class="chip-yld">${e.y.toFixed(2)}%</div>
+              </div>
+              <div class="chip-delta ${cls}">${dTxt}</div>
+            </div>
+          `;
+        }).join("");
+
+        // curve points
+        const curvePts = entries
+          .filter(e => e.x !== null && Number.isFinite(e.x))
+          .map(e => ({ x: e.x, y: e.y, label: e.mat.replace(" ", "") }));
+
+        // y-range padding
+        const ys = curvePts.map(p => p.y);
+        const yMinRaw = Math.min(...ys);
+        const yMaxRaw = Math.max(...ys);
+        const pad = Math.max(0.35, (yMaxRaw - yMinRaw) * 0.18);
+        const yMin = yMinRaw - pad;
+        const yMax = yMaxRaw + pad;
+
+        drawCurve(curvePts, yMin, yMax);
+      }
+
+      async function refresh() {
+        const meta = document.getElementById("meta-latest");
+        const date1 = document.getElementById("treasury-latest-date");
+        const date2 = document.getElementById("curve-date");
 
         try {
-          const res = await fetch(TREASURY_CSV, { cache: "no-store" });
-          if (!res.ok) throw new Error(`Treasury CSV HTTP ${res.status}`);
-          const text = await res.text();
+          const { headers, latest, prev } = await fetchTreasuryLatestRow();
+          const latestStr = fmtDate(latest.date);
 
-          const lines = text.trim().split(/\r?\n/);
-          if (lines.length < 2) throw new Error("Treasury CSV has no data");
+          meta.textContent = `Latest: ${latestStr}`;
+          date1.textContent = latestStr;
+          date2.textContent = latestStr;
 
-          const headers = parseCSVLine(lines[0]);
-
-          // Find last non-empty data row
-          let last = null;
-          for (let i = lines.length - 1; i >= 1; i--) {
-            const cols = parseCSVLine(lines[i]);
-            if (cols.length >= 2 && cols[0]) {
-              last = cols;
-              break;
-            }
-          }
-          if (!last) throw new Error("No valid last row found");
-
-          const latestDate = last[0];
-          const chips = buildChips(headers, last);
-
-          dateEl.textContent = latestDate;
-          meta.textContent = `Latest: ${latestDate}`;
-
-          rowEl.innerHTML = chips
-            .map(c => `<div class="chip"><span>${c.m}</span>${c.y}%</div>`)
-            .join("");
-        } catch (err) {
-          console.error(err);
-          meta.textContent = "Table failed to load";
-          dateEl.textContent = "—";
-          rowEl.innerHTML = `<div class="chip"><span>Error</span>Could not load Treasury data</div>`;
+          renderChips(headers, latest.cols, prev ? prev.cols : null);
+        } catch (e) {
+          console.error(e);
+          meta.textContent = "Failed to load Treasury data";
+          date1.textContent = "—";
+          date2.textContent = "—";
+          const chipWrap = document.getElementById("treasury-chips");
+          chipWrap.innerHTML = `
+            <div class="chip">
+              <div class="chip-left">
+                <div class="chip-mat">Error</div>
+                <div class="chip-yld">—</div>
+              </div>
+              <div class="chip-delta flat">Could not load</div>
+            </div>
+          `;
+          const svg = document.getElementById("curve-svg");
+          if (svg) svg.innerHTML = `<text x="24" y="48" fill="rgba(0,0,0,0.55)" font-size="14" font-weight="800">Curve unavailable</text>`;
         }
       }
 
-      // --- Embed warning (best-effort) ---
-      // If the iframe is blocked by X-Frame-Options/CSP, it will usually stay blank.
-      // We can't reliably detect that in JS due to cross-origin restrictions,
-      // but we can still show a friendly fallback hint after a short delay.
-      setTimeout(() => {
-        const warn = document.getElementById("embed-warn");
-        if (warn) warn.style.display = "block";
-      }, 2500);
-
-      loadTreasuryBottomRow();
-      // Refresh the bottom row every 5 minutes
-      setInterval(loadTreasuryBottomRow, 5 * 60 * 1000);
+      refresh();
+      // update every 5 minutes
+      setInterval(refresh, 5 * 60 * 1000);
     </script>
   </body>
 </html>
