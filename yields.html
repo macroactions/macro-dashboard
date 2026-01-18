@@ -6,250 +6,153 @@
     <title>Macro Dashboard — Fixed Income</title>
 
     <style>
-      :root {
-        --page-bg: #ffffff;
-        --section-bg: #f2f2f2;
-        --card-bg: #ffffff;
-        --soft-bg: #f6f7f9;
-        --border: rgba(0, 0, 0, 0.14);
-        --border-strong: rgba(0, 0, 0, 0.22);
-        --text: #111;
-        --muted: rgba(0, 0, 0, 0.62);
-        --radius-lg: 18px;
-        --radius-md: 14px;
-        --shadow: 0 1px 0 rgba(0, 0, 0, 0.04);
+      :root{
+        --page-bg:#ffffff;
+        --section-bg:#f2f2f2;
+        --card-bg:#ffffff;
+        --soft-bg:#f6f7f9;
+        --border:rgba(0,0,0,.14);
+        --border-strong:rgba(0,0,0,.22);
+        --text:#111;
+        --muted:rgba(0,0,0,.62);
+        --radius-lg:18px;
+        --radius-md:14px;
+        --shadow:0 1px 0 rgba(0,0,0,.04);
       }
-
-      * { box-sizing: border-box; }
-      body {
-        margin: 0;
-        font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-        background: var(--page-bg);
-        color: var(--text);
+      *{box-sizing:border-box}
+      body{
+        margin:0;
+        font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+        background:var(--page-bg);
+        color:var(--text);
       }
 
       /* Top nav */
-      .topbar {
-        position: sticky;
-        top: 0;
-        z-index: 10;
-        background: rgba(255, 255, 255, 0.92);
-        backdrop-filter: blur(10px);
-        border-bottom: 1px solid var(--border);
+      .topbar{
+        position:sticky; top:0; z-index:10;
+        background:rgba(255,255,255,.92);
+        backdrop-filter:blur(10px);
+        border-bottom:1px solid var(--border);
       }
-      .topbar-inner {
-        max-width: 1400px;
-        margin: 0 auto;
-        padding: 12px 18px;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        gap: 12px;
+      .topbar-inner{
+        max-width:1400px; margin:0 auto; padding:12px 18px;
+        display:flex; align-items:center; justify-content:space-between; gap:12px;
       }
-      .brand { font-weight: 800; letter-spacing: 0.2px; }
-      .nav { display: flex; gap: 8px; flex-wrap: wrap; justify-content: flex-end; }
-      .nav a {
-        text-decoration: none;
-        color: var(--text);
-        font-weight: 700;
-        font-size: 13px;
-        padding: 8px 12px;
-        border-radius: 999px;
-        border: 1px solid transparent;
+      .brand{font-weight:800; letter-spacing:.2px}
+      .nav{display:flex; gap:8px; flex-wrap:wrap; justify-content:flex-end}
+      .nav a{
+        text-decoration:none; color:var(--text);
+        font-weight:700; font-size:13px;
+        padding:8px 12px; border-radius:999px;
+        border:1px solid transparent;
       }
-      .nav a:hover,
-      .nav a.active {
-        border-color: var(--border);
-        background: var(--soft-bg);
+      .nav a:hover,.nav a.active{
+        border-color:var(--border);
+        background:var(--soft-bg);
       }
 
       /* Section */
-      .section {
-        background: var(--section-bg);
-        padding: 36px 18px 56px;
+      .section{background:var(--section-bg); padding:36px 18px 56px}
+      .section-inner{max-width:1400px; margin:0 auto}
+      .page-title{
+        text-align:center; font-size:28px; font-weight:900;
+        margin:10px 0 6px; letter-spacing:.2px;
       }
-      .section-inner {
-        max-width: 1400px;
-        margin: 0 auto;
-      }
-      .page-title {
-        text-align: center;
-        font-size: 28px;
-        font-weight: 900;
-        margin: 10px 0 6px;
-        letter-spacing: 0.2px;
-      }
-      .page-subtitle {
-        text-align: center;
-        margin: 0 0 22px;
-        color: var(--muted);
-        font-size: 13px;
-        font-weight: 650;
+      .page-subtitle{
+        text-align:center; margin:0 0 22px; color:var(--muted);
+        font-size:13px; font-weight:650;
       }
 
-      /* Cards */
-      .card {
-        background: var(--card-bg);
-        border: 1px solid var(--border);
-        border-radius: var(--radius-lg);
-        box-shadow: var(--shadow);
-        padding: 14px;
+      .block-title{
+        font-size:18px; font-weight:900; margin:24px 0 8px; letter-spacing:.2px;
       }
-      .card-head {
-        display: flex;
-        align-items: baseline;
-        justify-content: space-between;
-        gap: 12px;
-        margin-bottom: 10px;
-      }
-      .label {
-        display: inline-flex;
-        align-items: center;
-        gap: 10px;
-        background: var(--soft-bg);
-        border: 1px solid rgba(0, 0, 0, 0.12);
-        border-radius: var(--radius-md);
-        padding: 10px 14px;
-        font-size: 18px;
-        font-weight: 900;
-        line-height: 1.1;
-      }
-      .meta {
-        font-size: 12px;
-        font-weight: 800;
-        color: rgba(0, 0, 0, 0.65);
-        white-space: nowrap;
+      .block-desc{
+        margin:0 0 14px; color:var(--muted); font-size:13px; font-weight:650;
       }
 
-      /* Curve panel (native SVG) */
-      .curve {
-        border: 1px solid var(--border-strong);
-        border-radius: var(--radius-lg);
-        overflow: hidden;
-        background: #fff;
+      /* Grid */
+      .grid{
+        display:grid;
+        grid-template-columns:repeat(2,minmax(0,1fr));
+        gap:18px;
       }
-      .curve-top {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        gap: 12px;
-        padding: 10px 12px;
-        background: rgba(0, 0, 0, 0.02);
-        border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+      @media (max-width:980px){ .grid{grid-template-columns:1fr;} }
+
+      /* Card */
+      .card{
+        background:var(--card-bg);
+        border:1px solid var(--border);
+        border-radius:var(--radius-lg);
+        box-shadow:var(--shadow);
+        padding:14px;
       }
-      .curve-title {
-        font-weight: 950;
-        font-size: 13px;
-        letter-spacing: 0.15px;
+      .card-head{
+        display:flex; align-items:center; justify-content:space-between; gap:12px;
+        margin-bottom:10px;
       }
-      .curve-date {
-        font-weight: 850;
-        font-size: 12px;
-        color: rgba(0, 0, 0, 0.6);
-        white-space: nowrap;
+      .label{
+        display:inline-flex; align-items:center; gap:10px;
+        background:var(--soft-bg);
+        border:1px solid rgba(0,0,0,.12);
+        border-radius:var(--radius-md);
+        padding:10px 14px;
+        font-size:18px; font-weight:900; line-height:1.1;
       }
-      svg {
-        width: 100%;
-        height: 360px;
-        display: block;
+      .meta{
+        font-size:12px; font-weight:850;
+        color:rgba(0,0,0,.65); white-space:nowrap;
       }
 
-      /* Yield strip (more “terminal” / modern) */
-      .strip {
-        margin-top: 12px;
-        border: 1px solid rgba(0,0,0,0.12);
-        border-radius: var(--radius-lg);
-        background: #fff;
-        overflow: hidden;
-      }
-      .strip-top {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        gap: 12px;
-        padding: 10px 12px;
-        background: rgba(0,0,0,0.02);
-        border-bottom: 1px solid rgba(0,0,0,0.08);
-      }
-      .strip-title {
-        font-weight: 950;
-        font-size: 13px;
-        letter-spacing: 0.15px;
-      }
-      .strip-date {
-        font-weight: 850;
-        font-size: 12px;
-        color: rgba(0,0,0,0.6);
-        white-space: nowrap;
+      /* TradingView embed frame */
+      .embed{
+        border:1px solid var(--border-strong);
+        border-radius:var(--radius-lg);
+        overflow:hidden;
+        background:#fff;
+        height:420px;
       }
 
-      .chips {
-        display: grid;
-        grid-template-columns: repeat(6, minmax(0, 1fr));
-        gap: 10px;
-        padding: 12px;
+      /* Table card */
+      .table-wrap{
+        border:1px solid rgba(0,0,0,.12);
+        border-radius:var(--radius-lg);
+        overflow:hidden;
+        background:#fff;
       }
-      @media (max-width: 1100px) { .chips { grid-template-columns: repeat(4, 1fr); } }
-      @media (max-width: 760px)  { .chips { grid-template-columns: repeat(2, 1fr); } }
+      .table-top{
+        display:flex; align-items:center; justify-content:space-between; gap:12px;
+        padding:10px 12px;
+        background:rgba(0,0,0,.02);
+        border-bottom:1px solid rgba(0,0,0,.08);
+      }
+      .table-title{
+        font-weight:950; font-size:13px; letter-spacing:.15px;
+      }
+      .btn{
+        text-decoration:none;
+        font-weight:900;
+        font-size:12px;
+        padding:8px 10px;
+        border-radius:999px;
+        border:1px solid rgba(0,0,0,.12);
+        background:var(--soft-bg);
+        color:rgba(0,0,0,.8);
+        white-space:nowrap;
+      }
+      .btn:hover{ border-color:var(--border-strong); }
 
-      .chip {
-        border-radius: 14px;
-        background: linear-gradient(180deg, #ffffff 0%, #fafafa 100%);
-        border: 1px solid rgba(0,0,0,0.10);
-        padding: 10px 10px;
-        box-shadow: 0 1px 0 rgba(0,0,0,0.03);
-        display: flex;
-        align-items: baseline;
-        justify-content: space-between;
-        gap: 10px;
-        font-variant-numeric: tabular-nums;
+      .table-body{
+        padding:12px;
+        color:rgba(0,0,0,.7);
+        font-size:13px;
+        font-weight:650;
       }
-      .chip-left {
-        display: flex;
-        flex-direction: column;
-        gap: 2px;
-        min-width: 0;
-      }
-      .chip-mat {
-        font-size: 12px;
-        font-weight: 900;
-        color: rgba(0,0,0,0.65);
-        letter-spacing: 0.2px;
-      }
-      .chip-yld {
-        font-size: 16px;
-        font-weight: 950;
-        letter-spacing: -0.2px;
-      }
-      .chip-delta {
-        font-size: 12px;
-        font-weight: 900;
-        padding: 6px 8px;
-        border-radius: 999px;
-        border: 1px solid rgba(0,0,0,0.10);
-        background: var(--soft-bg);
-        white-space: nowrap;
-      }
-      .up   { color: #0b6b2f; border-color: rgba(11,107,47,0.18); background: rgba(11,107,47,0.06); }
-      .down { color: #8b0000; border-color: rgba(139,0,0,0.18); background: rgba(139,0,0,0.06); }
-      .flat { color: rgba(0,0,0,0.55); }
 
-      .note {
-        margin-top: 10px;
-        font-size: 12px;
-        color: rgba(0,0,0,0.55);
-        font-weight: 650;
-      }
-      .note a { color: inherit; }
-      .warn {
-        margin-top: 10px;
-        padding: 10px 12px;
-        border-radius: var(--radius-md);
-        border: 1px dashed rgba(0,0,0,0.25);
-        background: rgba(0,0,0,0.02);
-        font-size: 12px;
-        color: rgba(0,0,0,0.6);
-        font-weight: 650;
+      .note{
+        margin-top:10px;
+        font-size:12px;
+        color:rgba(0,0,0,.55);
+        font-weight:650;
       }
     </style>
   </head>
@@ -271,302 +174,186 @@
     <section class="section">
       <div class="section-inner">
         <div class="page-title">Fixed Income</div>
-        <div class="page-subtitle">US Treasury yield curve + latest daily yield curve row</div>
+        <div class="page-subtitle">Yield curves + reference tables</div>
 
-        <div class="card">
-          <div class="card-head">
-            <div class="label">United States — Treasuries</div>
-            <div class="meta" id="meta-latest">Loading…</div>
-          </div>
+        <div class="block-title">Yield Curves</div>
+        <div class="block-desc">Rendered with TradingView embed widgets (reliable on GitHub Pages).</div>
 
-          <!-- Native yield curve -->
-          <div class="curve">
-            <div class="curve-top">
-              <div class="curve-title">Yield curve (from Treasury daily curve)</div>
-              <div class="curve-date" id="curve-date">—</div>
+        <div class="grid">
+          <!-- US -->
+          <div class="card">
+            <div class="card-head">
+              <div class="label">United States</div>
+              <div class="meta">Yield curve (proxy)</div>
             </div>
-            <svg id="curve-svg" viewBox="0 0 1100 360" preserveAspectRatio="none"></svg>
-          </div>
-
-          <!-- Latest row strip -->
-          <div class="strip">
-            <div class="strip-top">
-              <div class="strip-title">Daily Treasury Yield Curve Rates (latest row)</div>
-              <div class="strip-date" id="treasury-latest-date">—</div>
-            </div>
-            <div class="chips" id="treasury-chips">
-              <div class="chip">
-                <div class="chip-left">
-                  <div class="chip-mat">Loading</div>
-                  <div class="chip-yld">—</div>
-                </div>
-                <div class="chip-delta flat">—</div>
+            <div class="embed">
+              <!-- US10Y is the most watched anchor; we can later overlay 2Y/30Y with a multi-symbol widget -->
+              <div class="tradingview-widget-container" style="height:100%;width:100%">
+                <div class="tradingview-widget-container__widget" style="height:100%;width:100%"></div>
+                <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-advanced-chart.js" async>
+                  {
+                    "autosize": true,
+                    "symbol": "TVC:US10Y",
+                    "interval": "D",
+                    "timezone": "Etc/UTC",
+                    "theme": "light",
+                    "style": "1",
+                    "locale": "en",
+                    "hide_top_toolbar": true,
+                    "hide_legend": false,
+                    "allow_symbol_change": true,
+                    "save_image": false,
+                    "details": false,
+                    "calendar": false,
+                    "support_host": "https://www.tradingview.com"
+                  }
+                </script>
               </div>
             </div>
           </div>
 
-          <div class="note">
-            Source:
-            <a
-              href="https://home.treasury.gov/resource-center/data-chart-center/interest-rates/TextView?type=daily_treasury_yield_curve&field_tdr_date_value=2026"
-              target="_blank"
-              rel="noreferrer"
-            >Treasury daily yield curve</a>
+          <!-- Germany -->
+          <div class="card">
+            <div class="card-head">
+              <div class="label">Germany</div>
+              <div class="meta">Yield curve (proxy)</div>
+            </div>
+            <div class="embed">
+              <div class="tradingview-widget-container" style="height:100%;width:100%">
+                <div class="tradingview-widget-container__widget" style="height:100%;width:100%"></div>
+                <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-advanced-chart.js" async>
+                  {
+                    "autosize": true,
+                    "symbol": "TVC:DE10Y",
+                    "interval": "D",
+                    "timezone": "Etc/UTC",
+                    "theme": "light",
+                    "style": "1",
+                    "locale": "en",
+                    "hide_top_toolbar": true,
+                    "hide_legend": false,
+                    "allow_symbol_change": true,
+                    "save_image": false,
+                    "details": false,
+                    "calendar": false,
+                    "support_host": "https://www.tradingview.com"
+                  }
+                </script>
+              </div>
+            </div>
           </div>
 
-          <div class="warn">
-            The curve iframe won’t embed because many sites block embedding; this page now renders the curve directly from Treasury’s latest yields (more reliable + cleaner).
+          <!-- UK -->
+          <div class="card">
+            <div class="card-head">
+              <div class="label">United Kingdom</div>
+              <div class="meta">Yield curve (proxy)</div>
+            </div>
+            <div class="embed">
+              <div class="tradingview-widget-container" style="height:100%;width:100%">
+                <div class="tradingview-widget-container__widget" style="height:100%;width:100%"></div>
+                <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-advanced-chart.js" async>
+                  {
+                    "autosize": true,
+                    "symbol": "TVC:GB10Y",
+                    "interval": "D",
+                    "timezone": "Etc/UTC",
+                    "theme": "light",
+                    "style": "1",
+                    "locale": "en",
+                    "hide_top_toolbar": true,
+                    "hide_legend": false,
+                    "allow_symbol_change": true,
+                    "save_image": false,
+                    "details": false,
+                    "calendar": false,
+                    "support_host": "https://www.tradingview.com"
+                  }
+                </script>
+              </div>
+            </div>
           </div>
+
+          <!-- China -->
+          <div class="card">
+            <div class="card-head">
+              <div class="label">China</div>
+              <div class="meta">Yield curve (proxy)</div>
+            </div>
+            <div class="embed">
+              <div class="tradingview-widget-container" style="height:100%;width:100%">
+                <div class="tradingview-widget-container__widget" style="height:100%;width:100%"></div>
+                <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-advanced-chart.js" async>
+                  {
+                    "autosize": true,
+                    "symbol": "TVC:CN10Y",
+                    "interval": "D",
+                    "timezone": "Etc/UTC",
+                    "theme": "light",
+                    "style": "1",
+                    "locale": "en",
+                    "hide_top_toolbar": true,
+                    "hide_legend": false,
+                    "allow_symbol_change": true,
+                    "save_image": false,
+                    "details": false,
+                    "calendar": false,
+                    "support_host": "https://www.tradingview.com"
+                  }
+                </script>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="block-title" style="margin-top:28px;">Reference Tables</div>
+        <div class="block-desc">CNBC pages can’t be embedded reliably; use quick-open buttons (or we can switch to API tables).</div>
+
+        <div class="grid">
+          <div class="card">
+            <div class="table-wrap">
+              <div class="table-top">
+                <div class="table-title">United States — Bonds (CNBC)</div>
+                <a class="btn" href="https://www.cnbc.com/bonds/" target="_blank" rel="noreferrer">Open on CNBC</a>
+              </div>
+              <div class="table-body">
+                CNBC blocks iframe embedding on most static sites. If you want this table to appear here
+                with live updates, we should pull yields from a fetchable source (Treasury CSV/API) and render it.
+              </div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="table-wrap">
+              <div class="table-top">
+                <div class="table-title">Germany — Bonds (CNBC)</div>
+                <a class="btn" href="https://www.cnbc.com/bonds/" target="_blank" rel="noreferrer">Open on CNBC</a>
+              </div>
+              <div class="table-body">
+                Same constraint as above. If you want live numbers on-page, we can source Bund yields via ECB feeds
+                (or another public dataset) and render the table here.
+              </div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="table-wrap">
+              <div class="table-top">
+                <div class="table-title">United Kingdom — Bonds (CNBC)</div>
+                <a class="btn" href="https://www.cnbc.com/bonds/" target="_blank" rel="noreferrer">Open on CNBC</a>
+              </div>
+              <div class="table-body">
+                For an on-page table we can pull Gilt yields from a public BoE/UKDMO source (or equivalent) and render it.
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="note">
+          Want the “true” yield curve (multiple maturities) instead of a 10Y proxy?
+          Next step is a multi-line TradingView embed per country (e.g., 2Y/5Y/10Y/30Y) so the curve shape is obvious.
         </div>
       </div>
     </section>
-
-    <script>
-      // Treasury CSV for a year. We'll choose the most recent date across rows (not "top" or "bottom").
-      function csvUrlForYear(year) {
-        return (
-          "https://home.treasury.gov/resource-center/data-chart-center/interest-rates/" +
-          "daily-treasury-rates.csv/" + year + "/all?_format=csv&field_tdr_date_value=" + year +
-          "&type=daily_treasury_yield_curve"
-        );
-      }
-
-      function splitCSV(line) {
-        // Treasury CSV is simple; no embedded commas in fields.
-        return line.split(",").map(s => s.trim());
-      }
-
-      function parseMDY(s) {
-        // "01/02/2026" -> Date
-        const m = /^(\d{2})\/(\d{2})\/(\d{4})$/.exec(s);
-        if (!m) return null;
-        const mm = Number(m[1]), dd = Number(m[2]), yy = Number(m[3]);
-        return new Date(Date.UTC(yy, mm - 1, dd));
-      }
-
-      function fmtDate(d) {
-        // back to MM/DD/YYYY
-        const mm = String(d.getUTCMonth() + 1).padStart(2, "0");
-        const dd = String(d.getUTCDate()).padStart(2, "0");
-        const yy = d.getUTCFullYear();
-        return `${mm}/${dd}/${yy}`;
-      }
-
-      function toNum(x) {
-        if (x === null || x === undefined) return null;
-        const n = Number(x);
-        return Number.isFinite(n) ? n : null;
-      }
-
-      function maturityToYears(label) {
-        // Handles: "1 Mo", "1.5 Month", "2 Mo", "3 Mo", "6 Mo", "1 Yr", "2 Yr", "3 Yr", "5 Yr", "7 Yr", "10 Yr", "20 Yr", "30 Yr"
-        const s = label.toLowerCase();
-        const num = parseFloat(s);
-        if (!Number.isFinite(num)) return null;
-        if (s.includes("mo")) return num / 12;
-        if (s.includes("month")) return num / 12;
-        if (s.includes("yr")) return num;
-        if (s.includes("year")) return num;
-        return null;
-      }
-
-      function deltaClass(d) {
-        if (d === null) return "flat";
-        if (d > 0) return "up";
-        if (d < 0) return "down";
-        return "flat";
-      }
-
-      function drawCurve(points, yMin, yMax) {
-        const svg = document.getElementById("curve-svg");
-        if (!svg) return;
-        svg.innerHTML = "";
-
-        const W = 1100, H = 360;
-        const padL = 64, padR = 22, padT = 24, padB = 52;
-
-        const xs = points.map(p => p.x);
-        const ys = points.map(p => p.y);
-        const xMin = Math.min(...xs), xMax = Math.max(...xs);
-
-        const X = (x) => padL + ((x - xMin) / (xMax - xMin)) * (W - padL - padR);
-        const Y = (y) => padT + (1 - (y - yMin) / (yMax - yMin)) * (H - padT - padB);
-
-        // grid lines
-        const grid = 4;
-        for (let i = 0; i <= grid; i++) {
-          const t = i / grid;
-          const yy = padT + t * (H - padT - padB);
-          const yVal = (yMax - t * (yMax - yMin)).toFixed(2);
-
-          svg.insertAdjacentHTML(
-            "beforeend",
-            `<line x1="${padL}" y1="${yy}" x2="${W - padR}" y2="${yy}" stroke="rgba(0,0,0,0.08)" />
-             <text x="12" y="${yy + 4}" fill="rgba(0,0,0,0.55)" font-size="12" font-weight="800">${yVal}</text>`
-          );
-        }
-
-        // x labels (use ~6 labels)
-        const labelEvery = Math.max(1, Math.floor(points.length / 6));
-        points.forEach((p, i) => {
-          if (i % labelEvery !== 0 && i !== points.length - 1) return;
-          const xx = X(p.x);
-          svg.insertAdjacentHTML(
-            "beforeend",
-            `<text x="${xx}" y="${H - 18}" text-anchor="middle" fill="rgba(0,0,0,0.55)" font-size="12" font-weight="900">${p.label}</text>`
-          );
-        });
-
-        // path
-        const d = points
-          .map((p, i) => `${i === 0 ? "M" : "L"} ${X(p.x).toFixed(2)} ${Y(p.y).toFixed(2)}`)
-          .join(" ");
-
-        svg.insertAdjacentHTML(
-          "beforeend",
-          `<path d="${d}" fill="none" stroke="rgba(0,0,0,0.88)" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" />
-           <path d="${d} L ${X(points[points.length - 1].x).toFixed(2)} ${H - padB} L ${X(points[0].x).toFixed(2)} ${H - padB} Z"
-                 fill="rgba(0,0,0,0.04)" stroke="none" />`
-        );
-
-        // dots
-        points.forEach(p => {
-          svg.insertAdjacentHTML(
-            "beforeend",
-            `<circle cx="${X(p.x).toFixed(2)}" cy="${Y(p.y).toFixed(2)}" r="3.3" fill="rgba(0,0,0,0.92)" />`
-          );
-        });
-      }
-
-      async function fetchTreasuryLatestRow() {
-        const nowYear = new Date().getFullYear();
-        const years = [nowYear, nowYear - 1]; // safety in early January
-
-        // pull both years and then choose max date across all rows
-        let allRows = [];
-        let headers = null;
-
-        for (const y of years) {
-          const url = csvUrlForYear(y);
-          const res = await fetch(url, { cache: "no-store" });
-          if (!res.ok) continue;
-
-          const text = await res.text();
-          const lines = text.trim().split(/\r?\n/);
-          if (lines.length < 2) continue;
-
-          const h = splitCSV(lines[0]);
-          if (!headers) headers = h;
-
-          for (let i = 1; i < lines.length; i++) {
-            const cols = splitCSV(lines[i]);
-            if (!cols[0]) continue;
-            const d = parseMDY(cols[0]);
-            if (!d) continue;
-            allRows.push({ date: d, cols });
-          }
-        }
-
-        if (!headers || allRows.length === 0) {
-          throw new Error("No Treasury rows found");
-        }
-
-        // pick latest by date
-        allRows.sort((a, b) => a.date - b.date);
-        const latest = allRows[allRows.length - 1];
-        const prev = allRows.length >= 2 ? allRows[allRows.length - 2] : null;
-
-        return { headers, latest, prev };
-      }
-
-      function renderChips(headers, latestCols, prevCols) {
-        const chipWrap = document.getElementById("treasury-chips");
-        chipWrap.innerHTML = "";
-
-        // Build list of maturities from headers (excluding Date)
-        const entries = [];
-        for (let i = 1; i < headers.length; i++) {
-          const mat = headers[i];
-          const y = toNum(latestCols[i]);
-          if (y === null) continue;
-
-          const py = prevCols ? toNum(prevCols[i]) : null;
-          const d = (py === null) ? null : (y - py);
-
-          entries.push({ mat, y, d, x: maturityToYears(mat) });
-        }
-
-        // sort by maturity (in years)
-        entries.sort((a, b) => (a.x ?? 999) - (b.x ?? 999));
-
-        chipWrap.innerHTML = entries.map(e => {
-          const d = e.d;
-          const cls = deltaClass(d);
-          const dTxt = d === null ? "Δ —" : `Δ ${(d > 0 ? "+" : "") + d.toFixed(2)}%`;
-          return `
-            <div class="chip">
-              <div class="chip-left">
-                <div class="chip-mat">${e.mat}</div>
-                <div class="chip-yld">${e.y.toFixed(2)}%</div>
-              </div>
-              <div class="chip-delta ${cls}">${dTxt}</div>
-            </div>
-          `;
-        }).join("");
-
-        // curve points
-        const curvePts = entries
-          .filter(e => e.x !== null && Number.isFinite(e.x))
-          .map(e => ({ x: e.x, y: e.y, label: e.mat.replace(" ", "") }));
-
-        // y-range padding
-        const ys = curvePts.map(p => p.y);
-        const yMinRaw = Math.min(...ys);
-        const yMaxRaw = Math.max(...ys);
-        const pad = Math.max(0.35, (yMaxRaw - yMinRaw) * 0.18);
-        const yMin = yMinRaw - pad;
-        const yMax = yMaxRaw + pad;
-
-        drawCurve(curvePts, yMin, yMax);
-      }
-
-      async function refresh() {
-        const meta = document.getElementById("meta-latest");
-        const date1 = document.getElementById("treasury-latest-date");
-        const date2 = document.getElementById("curve-date");
-
-        try {
-          const { headers, latest, prev } = await fetchTreasuryLatestRow();
-          const latestStr = fmtDate(latest.date);
-
-          meta.textContent = `Latest: ${latestStr}`;
-          date1.textContent = latestStr;
-          date2.textContent = latestStr;
-
-          renderChips(headers, latest.cols, prev ? prev.cols : null);
-        } catch (e) {
-          console.error(e);
-          meta.textContent = "Failed to load Treasury data";
-          date1.textContent = "—";
-          date2.textContent = "—";
-          const chipWrap = document.getElementById("treasury-chips");
-          chipWrap.innerHTML = `
-            <div class="chip">
-              <div class="chip-left">
-                <div class="chip-mat">Error</div>
-                <div class="chip-yld">—</div>
-              </div>
-              <div class="chip-delta flat">Could not load</div>
-            </div>
-          `;
-          const svg = document.getElementById("curve-svg");
-          if (svg) svg.innerHTML = `<text x="24" y="48" fill="rgba(0,0,0,0.55)" font-size="14" font-weight="800">Curve unavailable</text>`;
-        }
-      }
-
-      refresh();
-      // update every 5 minutes
-      setInterval(refresh, 5 * 60 * 1000);
-    </script>
   </body>
 </html>
