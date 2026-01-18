@@ -46,15 +46,8 @@
         justify-content: space-between;
         gap: 12px;
       }
-      .brand {
-        font-weight: 800;
-        letter-spacing: 0.2px;
-      }
-      .nav {
-        display: flex;
-        gap: 8px;
-        flex-wrap: wrap;
-      }
+      .brand { font-weight: 800; letter-spacing: 0.2px; }
+      .nav { display: flex; gap: 8px; flex-wrap: wrap; }
       .nav a {
         text-decoration: none;
         color: var(--text);
@@ -125,18 +118,7 @@
         font-size: 13px;
       }
 
-      /* Layout rows */
-      .row {
-        display: grid;
-        grid-template-columns: 2fr 1fr;
-        gap: 18px;
-        align-items: start;
-      }
-      @media (max-width: 1100px) {
-        .row { grid-template-columns: 1fr; }
-      }
-
-      /* Grids */
+      /* Layout */
       .grid {
         display: grid;
         grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -184,12 +166,14 @@
         white-space: nowrap;
       }
 
+      /* Embed */
       .embed {
         height: 340px;
         border: 1px solid var(--border-strong);
         border-radius: var(--radius-lg);
         overflow: hidden;
         background: #fff;
+        margin-bottom: 14px;
       }
       .embed iframe {
         width: 100%;
@@ -198,32 +182,44 @@
         display: block;
       }
 
-      /* Watchlist */
-      .watchlist-title {
-        font-size: 14px;
-        font-weight: 900;
-        margin: 0 0 10px;
-      }
-      .watch-item {
-        display: block;
-        text-decoration: none;
-        color: var(--text);
+      /* Near-50 list */
+      .mini {
         border: 1px solid rgba(0, 0, 0, 0.12);
         background: var(--soft-bg);
         border-radius: var(--radius-md);
-        padding: 10px 12px;
-        margin-bottom: 10px;
-        font-weight: 800;
+        padding: 12px;
+      }
+      .mini-title {
+        font-weight: 900;
         font-size: 13px;
-        line-height: 1.25;
+        margin: 0 0 10px;
       }
-      .watch-item small {
-        display: block;
-        font-weight: 700;
-        color: rgba(0,0,0,0.55);
-        margin-top: 6px;
+      .mini-row {
+        display: grid;
+        grid-template-columns: 1fr auto;
+        gap: 10px;
+        align-items: center;
+        padding: 10px 10px;
+        border-radius: 12px;
+        background: #fff;
+        border: 1px solid rgba(0, 0, 0, 0.10);
+        margin-bottom: 8px;
+        text-decoration: none;
+        color: var(--text);
       }
-      .watch-item:hover { border-color: var(--border-strong); }
+      .mini-row:hover { border-color: var(--border-strong); }
+      .mini-name { font-weight: 800; font-size: 13px; line-height: 1.2; }
+      .mini-sub { font-size: 11px; color: rgba(0,0,0,0.55); margin-top: 4px; font-weight: 700; }
+      .mini-price {
+        font-weight: 900;
+        font-size: 14px;
+        padding: 6px 10px;
+        border-radius: 999px;
+        background: var(--soft-bg);
+        border: 1px solid rgba(0,0,0,0.12);
+        white-space: nowrap;
+      }
+      .muted { color: rgba(0,0,0,0.55); font-size: 12px; font-weight: 700; }
 
       .footer {
         text-align: center;
@@ -231,6 +227,25 @@
         font-size: 12px;
         color: rgba(0, 0, 0, 0.55);
       }
+
+      .btnrow {
+        display: flex;
+        justify-content: center;
+        gap: 10px;
+        flex-wrap: wrap;
+        margin: 6px 0 18px;
+      }
+      .btn {
+        cursor: pointer;
+        border: 1px solid rgba(0,0,0,0.12);
+        background: var(--soft-bg);
+        border-radius: 999px;
+        padding: 8px 12px;
+        font-weight: 900;
+        font-size: 12px;
+        color: var(--text);
+      }
+      .btn:hover { border-color: var(--border-strong); }
     </style>
   </head>
 
@@ -251,7 +266,11 @@
       <div class="section-inner">
         <div class="page-title">Event Markets</div>
         <div class="page-subtitle">
-          Kalshi embeds + a curated Polymarket watchlist (macro, policy, geopolitics).
+          Kalshi only. Each panel shows the contracts <b>closest to 50%</b> (≈ 50¢) so you see where the market is “in play.”
+        </div>
+
+        <div class="btnrow">
+          <button class="btn" id="refreshBtn">Refresh probabilities</button>
         </div>
 
         <div class="chips">
@@ -260,101 +279,77 @@
           <a class="chip" href="#geo">Geopolitics</a>
         </div>
 
-        <!-- MONETARY POLICY -->
+        <!-- MONETARY -->
         <div id="monetary" class="block-title">Monetary Policy</div>
-        <div class="block-desc">Fed meeting outcomes, rate-cut path, inflation and labor prints, GDP.</div>
+        <div class="block-desc">Fed decisions, inflation, labor, GDP.</div>
 
-        <div class="row">
-          <div class="grid">
-            <div class="card">
-              <div class="card-head">
-                <div class="label">Fed Decision (Jan 26)</div>
-                <div class="source">Kalshi</div>
-              </div>
-              <div class="embed">
-                <iframe
-                  src="https://kalshi.com/external-widget/events-categorical/KXFEDDECISION-26JAN?color_scheme=light&period=all&widget_size=large"
-                  loading="lazy"
-                ></iframe>
-              </div>
+        <div class="grid">
+          <!-- Featured embed you already confirmed works -->
+          <div class="card">
+            <div class="card-head">
+              <div class="label">Fed Decision (Jan 26)</div>
+              <div class="source">Kalshi</div>
             </div>
-
-            <div class="card">
-              <div class="card-head">
-                <div class="label">Rate Cut Count (to Dec 31)</div>
-                <div class="source">Kalshi</div>
-              </div>
-              <div class="embed">
-                <iframe
-                  src="https://kalshi.com/external-widget/events-categorical/KXRATECUTCOUNT-26DEC31?color_scheme=light&period=all&widget_size=large"
-                  loading="lazy"
-                ></iframe>
-              </div>
+            <div class="embed">
+              <iframe
+                src="https://kalshi.com/external-widget/events-categorical/KXFEDDECISION-26JAN?color_scheme=light&period=all&widget_size=large"
+                loading="lazy"
+              ></iframe>
             </div>
-
-            <div class="card">
-              <div class="card-head">
-                <div class="label">CPI (Jan)</div>
-                <div class="source">Kalshi</div>
-              </div>
-              <div class="embed">
-                <iframe
-                  src="https://kalshi.com/external-widget/events-categorical/KXCPI-26JAN?color_scheme=light&period=all&widget_size=large"
-                  loading="lazy"
-                ></iframe>
-              </div>
-            </div>
-
-            <div class="card">
-              <div class="card-head">
-                <div class="label">Unemployment (U-3, Jan)</div>
-                <div class="source">Kalshi</div>
-              </div>
-              <div class="embed">
-                <iframe
-                  src="https://kalshi.com/external-widget/events-categorical/KXU3-26JAN?color_scheme=light&period=all&widget_size=large"
-                  loading="lazy"
-                ></iframe>
-              </div>
-            </div>
-
-            <div class="card">
-              <div class="card-head">
-                <div class="label">Annual GDP (2025)</div>
-                <div class="source">Kalshi</div>
-              </div>
-              <div class="embed">
-                <iframe
-                  src="https://kalshi.com/external-widget/events-categorical/KXGDPYEAR-25?color_scheme=light&period=all&widget_size=large"
-                  loading="lazy"
-                ></iframe>
-              </div>
+            <div class="mini" data-event="KXFEDDECISION-26JAN">
+              <div class="mini-title">Closest to 50%</div>
+              <div class="muted">Loading…</div>
             </div>
           </div>
 
           <div class="card">
-            <div class="watchlist-title">Polymarket Watchlist (Monetary)</div>
-            <a class="watch-item" target="_blank" rel="noreferrer"
-              href="https://polymarket.com/event/what-day-will-trump-announce-fed-chair-nominee">
-              What day will Trump announce Fed Chair nominee?
-              <small>Opens Polymarket</small>
-            </a>
-            <a class="watch-item" target="_blank" rel="noreferrer"
-              href="https://polymarket.com/event/fed-rate-cut-by-629">
-              Fed rate cut by 6/29?
-              <small>Opens Polymarket</small>
-            </a>
-            <a class="watch-item" target="_blank" rel="noreferrer"
-              href="https://polymarket.com/event/us-gdp-growth-in-q4-2025">
-              US GDP growth in Q4 2025
-              <small>Opens Polymarket</small>
-            </a>
+            <div class="card-head">
+              <div class="label">CPI (Jan)</div>
+              <div class="source">Kalshi</div>
+            </div>
+            <div class="mini" data-event="KXCPI-26JAN">
+              <div class="mini-title">Closest to 50%</div>
+              <div class="muted">Loading…</div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-head">
+              <div class="label">Unemployment (U-3, Jan)</div>
+              <div class="source">Kalshi</div>
+            </div>
+            <div class="mini" data-event="KXU3-26JAN">
+              <div class="mini-title">Closest to 50%</div>
+              <div class="muted">Loading…</div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-head">
+              <div class="label">Rate Cut Count (to Dec 31)</div>
+              <div class="source">Kalshi</div>
+            </div>
+            <div class="mini" data-event="KXRATECUTCOUNT-26DEC31">
+              <div class="mini-title">Closest to 50%</div>
+              <div class="muted">Loading…</div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-head">
+              <div class="label">Annual GDP (2025)</div>
+              <div class="source">Kalshi</div>
+            </div>
+            <div class="mini" data-event="KXGDPYEAR-25">
+              <div class="mini-title">Closest to 50%</div>
+              <div class="muted">Loading…</div>
+            </div>
           </div>
         </div>
 
-        <!-- POLITICS & GOVERNANCE -->
+        <!-- POLITICS -->
         <div id="politics" class="block-title">Politics & Governance</div>
-        <div class="block-desc">Elections and key appointments with policy/macro impact.</div>
+        <div class="block-desc">Appointments and control outcomes with major policy impact.</div>
 
         <div class="grid">
           <div class="card">
@@ -362,11 +357,9 @@
               <div class="label">President (Person)</div>
               <div class="source">Kalshi</div>
             </div>
-            <div class="embed">
-              <iframe
-                src="https://kalshi.com/external-widget/events-categorical/KXPRESPERSON-28?color_scheme=light&period=all&widget_size=large"
-                loading="lazy"
-              ></iframe>
+            <div class="mini" data-event="KXPRESPERSON-28">
+              <div class="mini-title">Closest to 50%</div>
+              <div class="muted">Loading…</div>
             </div>
           </div>
 
@@ -375,11 +368,9 @@
               <div class="label">Fed Chair Nominee (Person)</div>
               <div class="source">Kalshi</div>
             </div>
-            <div class="embed">
-              <iframe
-                src="https://kalshi.com/external-widget/events-categorical/KXFEDCHAIRNOM-29?color_scheme=light&period=all&widget_size=large"
-                loading="lazy"
-              ></iframe>
+            <div class="mini" data-event="KXFEDCHAIRNOM-29">
+              <div class="mini-title">Closest to 50%</div>
+              <div class="muted">Loading…</div>
             </div>
           </div>
 
@@ -388,56 +379,151 @@
               <div class="label">House Control (2026)</div>
               <div class="source">Kalshi</div>
             </div>
-            <div class="embed">
-              <iframe
-                src="https://kalshi.com/external-widget/events-categorical/CONTROLH-2026?color_scheme=light&period=all&widget_size=large"
-                loading="lazy"
-              ></iframe>
+            <div class="mini" data-event="CONTROLH-2026">
+              <div class="mini-title">Closest to 50%</div>
+              <div class="muted">Loading…</div>
             </div>
           </div>
         </div>
 
-        <!-- GEOPOLITICS -->
+        <!-- GEO -->
         <div id="geo" class="block-title">Geopolitics</div>
-        <div class="block-desc">Foreign affairs events with real macro relevance (risk, energy, sanctions).</div>
+        <div class="block-desc">Foreign affairs events with macro relevance.</div>
 
-        <div class="row">
-          <div class="grid">
-            <div class="card">
-              <div class="card-head">
-                <div class="label">Greenland Purchase</div>
-                <div class="source">Kalshi</div>
-              </div>
-              <div class="embed">
-                <iframe
-                  src="https://kalshi.com/external-widget/events-categorical/KXGREENLAND-29?color_scheme=light&period=all&widget_size=large"
-                  loading="lazy"
-                ></iframe>
-              </div>
-            </div>
-          </div>
-
+        <div class="grid">
           <div class="card">
-            <div class="watchlist-title">Polymarket Watchlist (Geo)</div>
-
-            <a class="watch-item" target="_blank" rel="noreferrer"
-              href="https://polymarket.com/event/will-trump-acquire-greenland-before-2027">
-              Will Trump acquire Greenland before 2027?
-              <small>Opens Polymarket</small>
-            </a>
-
-            <a class="watch-item" target="_blank" rel="noreferrer"
-              href="https://polymarket.com/event/khamenei-out-as-supreme-leader-of-iran-by-january-31">
-              Khamenei out as Supreme Leader of Iran by Jan 31?
-              <small>Opens Polymarket</small>
-            </a>
+            <div class="card-head">
+              <div class="label">Greenland Purchase</div>
+              <div class="source">Kalshi</div>
+            </div>
+            <div class="mini" data-event="KXGREENLAND-29">
+              <div class="mini-title">Closest to 50%</div>
+              <div class="muted">Loading…</div>
+            </div>
           </div>
         </div>
 
         <div class="footer">
-          If any Kalshi tile shows blank, it means the embed ticker differs from the market slug—send me the page and I’ll correct the embed ticker 1:1.
+          Powered by Kalshi public market-data endpoints (no login required). :contentReference[oaicite:2]{index=2}
         </div>
       </div>
     </section>
+
+    <script>
+      // Public, unauthenticated Kalshi API base (works for ALL markets). :contentReference[oaicite:3]{index=3}
+      const API_BASE = "https://api.elections.kalshi.com/trade-api/v2";
+
+      // Pick N markets closest to 50¢ (50%).
+      const PICK_COUNT = 4;
+
+      function centsToPct(cents) {
+        if (typeof cents !== "number") return null;
+        return (cents / 100) * 100; // 50¢ => 50%
+      }
+
+      function safeNum(x) {
+        return (typeof x === "number" && isFinite(x)) ? x : null;
+      }
+
+      // Use yes_price if present; otherwise fall back to last_price if present.
+      function getProbCents(m) {
+        const yp = safeNum(m.yes_price);
+        if (yp !== null) return yp;
+        const lp = safeNum(m.last_price);
+        if (lp !== null) return lp;
+        return null;
+      }
+
+      function marketUrlFromTicker(marketTicker) {
+        // Generic deep link to market ticker page
+        return `https://kalshi.com/markets/${marketTicker}`;
+      }
+
+      async function loadNear50ForEvent(eventTicker, container) {
+        container.innerHTML = `
+          <div class="mini-title">Closest to 50%</div>
+          <div class="muted">Loading…</div>
+        `;
+
+        try {
+          // Pull open markets for this event. yes_price is included in this response. :contentReference[oaicite:4]{index=4}
+          const url = `${API_BASE}/markets?event_ticker=${encodeURIComponent(eventTicker)}&status=open&limit=200`;
+          const res = await fetch(url, { headers: { "accept": "application/json" } });
+          if (!res.ok) throw new Error(`HTTP ${res.status}`);
+          const data = await res.json();
+
+          const markets = Array.isArray(data.markets) ? data.markets : [];
+          const scored = markets
+            .map(m => {
+              const p = getProbCents(m);
+              if (p === null) return null;
+              return {
+                ticker: m.ticker,
+                title: m.title || m.ticker,
+                yes_price: p,
+                dist: Math.abs(p - 50)
+              };
+            })
+            .filter(Boolean)
+            .sort((a, b) => a.dist - b.dist)
+            .slice(0, PICK_COUNT);
+
+          if (!scored.length) {
+            container.innerHTML = `
+              <div class="mini-title">Closest to 50%</div>
+              <div class="muted">No open markets found (or prices unavailable).</div>
+            `;
+            return;
+          }
+
+          const rows = scored.map(s => {
+            const pct = centsToPct(s.yes_price);
+            const pctText = (pct === null) ? "—" : `${pct.toFixed(0)}%`;
+            const priceText = `${s.yes_price}¢`;
+            return `
+              <a class="mini-row" href="${marketUrlFromTicker(s.ticker)}" target="_blank" rel="noreferrer">
+                <div>
+                  <div class="mini-name">${escapeHtml(s.title)}</div>
+                  <div class="mini-sub">${escapeHtml(s.ticker)} • ${pctText} implied</div>
+                </div>
+                <div class="mini-price">${priceText}</div>
+              </a>
+            `;
+          }).join("");
+
+          container.innerHTML = `
+            <div class="mini-title">Closest to 50%</div>
+            ${rows}
+            <div class="muted" style="margin-top:10px;">
+              Showing ${scored.length} closest contracts by YES price (¢ ≈ %). :contentReference[oaicite:5]{index=5}
+            </div>
+          `;
+        } catch (err) {
+          container.innerHTML = `
+            <div class="mini-title">Closest to 50%</div>
+            <div class="muted">Couldn’t load this event right now.</div>
+          `;
+        }
+      }
+
+      function escapeHtml(str) {
+        return String(str)
+          .replaceAll("&", "&amp;")
+          .replaceAll("<", "&lt;")
+          .replaceAll(">", "&gt;")
+          .replaceAll('"', "&quot;")
+          .replaceAll("'", "&#039;");
+      }
+
+      async function refreshAll() {
+        const nodes = document.querySelectorAll("[data-event]");
+        await Promise.all(Array.from(nodes).map(n => loadNear50ForEvent(n.dataset.event, n)));
+      }
+
+      document.getElementById("refreshBtn").addEventListener("click", refreshAll);
+
+      // Initial load
+      refreshAll();
+    </script>
   </body>
 </html>
