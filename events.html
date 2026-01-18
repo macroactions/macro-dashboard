@@ -63,7 +63,7 @@
         background: var(--soft-bg);
       }
 
-      /* Page section */
+      /* Section */
       .section {
         background: var(--section-bg);
         padding: 36px 18px 56px;
@@ -118,7 +118,7 @@
         font-size: 13px;
       }
 
-      /* Layout */
+      /* Grid */
       .grid {
         display: grid;
         grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -166,14 +166,12 @@
         white-space: nowrap;
       }
 
-      /* Embed */
       .embed {
         height: 340px;
         border: 1px solid var(--border-strong);
         border-radius: var(--radius-lg);
         overflow: hidden;
         background: #fff;
-        margin-bottom: 14px;
       }
       .embed iframe {
         width: 100%;
@@ -182,70 +180,12 @@
         display: block;
       }
 
-      /* Near-50 list */
-      .mini {
-        border: 1px solid rgba(0, 0, 0, 0.12);
-        background: var(--soft-bg);
-        border-radius: var(--radius-md);
-        padding: 12px;
-      }
-      .mini-title {
-        font-weight: 900;
-        font-size: 13px;
-        margin: 0 0 10px;
-      }
-      .mini-row {
-        display: grid;
-        grid-template-columns: 1fr auto;
-        gap: 10px;
-        align-items: center;
-        padding: 10px 10px;
-        border-radius: 12px;
-        background: #fff;
-        border: 1px solid rgba(0, 0, 0, 0.10);
-        margin-bottom: 8px;
-        text-decoration: none;
-        color: var(--text);
-      }
-      .mini-row:hover { border-color: var(--border-strong); }
-      .mini-name { font-weight: 800; font-size: 13px; line-height: 1.2; }
-      .mini-sub { font-size: 11px; color: rgba(0,0,0,0.55); margin-top: 4px; font-weight: 700; }
-      .mini-price {
-        font-weight: 900;
-        font-size: 14px;
-        padding: 6px 10px;
-        border-radius: 999px;
-        background: var(--soft-bg);
-        border: 1px solid rgba(0,0,0,0.12);
-        white-space: nowrap;
-      }
-      .muted { color: rgba(0,0,0,0.55); font-size: 12px; font-weight: 700; }
-
       .footer {
         text-align: center;
         margin-top: 28px;
         font-size: 12px;
         color: rgba(0, 0, 0, 0.55);
       }
-
-      .btnrow {
-        display: flex;
-        justify-content: center;
-        gap: 10px;
-        flex-wrap: wrap;
-        margin: 6px 0 18px;
-      }
-      .btn {
-        cursor: pointer;
-        border: 1px solid rgba(0,0,0,0.12);
-        background: var(--soft-bg);
-        border-radius: 999px;
-        padding: 8px 12px;
-        font-weight: 900;
-        font-size: 12px;
-        color: var(--text);
-      }
-      .btn:hover { border-color: var(--border-strong); }
     </style>
   </head>
 
@@ -265,26 +205,19 @@
     <section class="section">
       <div class="section-inner">
         <div class="page-title">Event Markets</div>
-        <div class="page-subtitle">
-          Kalshi only. Each panel shows the contracts <b>closest to 50%</b> (≈ 50¢) so you see where the market is “in play.”
-        </div>
-
-        <div class="btnrow">
-          <button class="btn" id="refreshBtn">Refresh probabilities</button>
-        </div>
+        <div class="page-subtitle">Kalshi markets embedded for quick monitoring.</div>
 
         <div class="chips">
           <a class="chip" href="#monetary">Monetary Policy</a>
+          <a class="chip" href="#macro">Macro & Inflation</a>
           <a class="chip" href="#politics">Politics & Governance</a>
-          <a class="chip" href="#geo">Geopolitics</a>
         </div>
 
-        <!-- MONETARY -->
+        <!-- MONETARY POLICY -->
         <div id="monetary" class="block-title">Monetary Policy</div>
-        <div class="block-desc">Fed decisions, inflation, labor, GDP.</div>
+        <div class="block-desc">FOMC outcomes and the next hike regime indicator.</div>
 
         <div class="grid">
-          <!-- Featured embed you already confirmed works -->
           <div class="card">
             <div class="card-head">
               <div class="label">Fed Decision (Jan 26)</div>
@@ -296,42 +229,37 @@
                 loading="lazy"
               ></iframe>
             </div>
-            <div class="mini" data-event="KXFEDDECISION-26JAN">
-              <div class="mini-title">Closest to 50%</div>
-              <div class="muted">Loading…</div>
-            </div>
           </div>
 
           <div class="card">
             <div class="card-head">
-              <div class="label">CPI (Jan)</div>
+              <div class="label">Next Fed Rate Hike</div>
               <div class="source">Kalshi</div>
             </div>
-            <div class="mini" data-event="KXCPI-26JAN">
-              <div class="mini-title">Closest to 50%</div>
-              <div class="muted">Loading…</div>
+            <div class="embed">
+              <iframe
+                src="https://kalshi.com/external-widget/events-categorical/FEDHIKE?color_scheme=light&period=all&widget_size=large"
+                loading="lazy"
+              ></iframe>
             </div>
           </div>
+        </div>
 
+        <!-- MACRO & INFLATION -->
+        <div id="macro" class="block-title">Macro & Inflation</div>
+        <div class="block-desc">Growth, inflation, unemployment spike risk, and gasoline prices.</div>
+
+        <div class="grid">
           <div class="card">
             <div class="card-head">
-              <div class="label">Unemployment (U-3, Jan)</div>
+              <div class="label">US GDP Growth (Jan 30)</div>
               <div class="source">Kalshi</div>
             </div>
-            <div class="mini" data-event="KXU3-26JAN">
-              <div class="mini-title">Closest to 50%</div>
-              <div class="muted">Loading…</div>
-            </div>
-          </div>
-
-          <div class="card">
-            <div class="card-head">
-              <div class="label">Rate Cut Count (to Dec 31)</div>
-              <div class="source">Kalshi</div>
-            </div>
-            <div class="mini" data-event="KXRATECUTCOUNT-26DEC31">
-              <div class="mini-title">Closest to 50%</div>
-              <div class="muted">Loading…</div>
+            <div class="embed">
+              <iframe
+                src="https://kalshi.com/external-widget/events-categorical/KXGDP-26JAN30?color_scheme=light&period=all&widget_size=large"
+                loading="lazy"
+              ></iframe>
             </div>
           </div>
 
@@ -340,14 +268,55 @@
               <div class="label">Annual GDP (2025)</div>
               <div class="source">Kalshi</div>
             </div>
-            <div class="mini" data-event="KXGDPYEAR-25">
-              <div class="mini-title">Closest to 50%</div>
-              <div class="muted">Loading…</div>
+            <div class="embed">
+              <iframe
+                src="https://kalshi.com/external-widget/events-categorical/KXGDPYEAR-25?color_scheme=light&period=all&widget_size=large"
+                loading="lazy"
+              ></iframe>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-head">
+              <div class="label">Inflation (CPI YoY, Jan)</div>
+              <div class="source">Kalshi</div>
+            </div>
+            <div class="embed">
+              <iframe
+                src="https://kalshi.com/external-widget/events-categorical/KXCPIYOY-26JAN?color_scheme=light&period=all&widget_size=large"
+                loading="lazy"
+              ></iframe>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-head">
+              <div class="label">Unemployment Spike (Max U-3)</div>
+              <div class="source">Kalshi</div>
+            </div>
+            <div class="embed">
+              <iframe
+                src="https://kalshi.com/external-widget/events-categorical/KXU3MAX-27?color_scheme=light&period=all&widget_size=large"
+                loading="lazy"
+              ></iframe>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-head">
+              <div class="label">US Gas Price (AAA, Jan 31)</div>
+              <div class="source">Kalshi</div>
+            </div>
+            <div class="embed">
+              <iframe
+                src="https://kalshi.com/external-widget/events-categorical/KXAAAGASM-26JAN31?color_scheme=light&period=all&widget_size=large"
+                loading="lazy"
+              ></iframe>
             </div>
           </div>
         </div>
 
-        <!-- POLITICS -->
+        <!-- POLITICS & GOVERNANCE -->
         <div id="politics" class="block-title">Politics & Governance</div>
         <div class="block-desc">Appointments and control outcomes with major policy impact.</div>
 
@@ -357,9 +326,11 @@
               <div class="label">President (Person)</div>
               <div class="source">Kalshi</div>
             </div>
-            <div class="mini" data-event="KXPRESPERSON-28">
-              <div class="mini-title">Closest to 50%</div>
-              <div class="muted">Loading…</div>
+            <div class="embed">
+              <iframe
+                src="https://kalshi.com/external-widget/events-categorical/KXPRESPERSON-28?color_scheme=light&period=all&widget_size=large"
+                loading="lazy"
+              ></iframe>
             </div>
           </div>
 
@@ -368,9 +339,11 @@
               <div class="label">Fed Chair Nominee (Person)</div>
               <div class="source">Kalshi</div>
             </div>
-            <div class="mini" data-event="KXFEDCHAIRNOM-29">
-              <div class="mini-title">Closest to 50%</div>
-              <div class="muted">Loading…</div>
+            <div class="embed">
+              <iframe
+                src="https://kalshi.com/external-widget/events-categorical/KXFEDCHAIRNOM-29?color_scheme=light&period=all&widget_size=large"
+                loading="lazy"
+              ></iframe>
             </div>
           </div>
 
@@ -379,151 +352,19 @@
               <div class="label">House Control (2026)</div>
               <div class="source">Kalshi</div>
             </div>
-            <div class="mini" data-event="CONTROLH-2026">
-              <div class="mini-title">Closest to 50%</div>
-              <div class="muted">Loading…</div>
-            </div>
-          </div>
-        </div>
-
-        <!-- GEO -->
-        <div id="geo" class="block-title">Geopolitics</div>
-        <div class="block-desc">Foreign affairs events with macro relevance.</div>
-
-        <div class="grid">
-          <div class="card">
-            <div class="card-head">
-              <div class="label">Greenland Purchase</div>
-              <div class="source">Kalshi</div>
-            </div>
-            <div class="mini" data-event="KXGREENLAND-29">
-              <div class="mini-title">Closest to 50%</div>
-              <div class="muted">Loading…</div>
+            <div class="embed">
+              <iframe
+                src="https://kalshi.com/external-widget/events-categorical/CONTROLH-2026?color_scheme=light&period=all&widget_size=large"
+                loading="lazy"
+              ></iframe>
             </div>
           </div>
         </div>
 
         <div class="footer">
-          Powered by Kalshi public market-data endpoints (no login required). :contentReference[oaicite:2]{index=2}
+          If any single widget is blank, tell me which label it is and I’ll swap that one embed to Kalshi’s alternate widget URL format.
         </div>
       </div>
     </section>
-
-    <script>
-      // Public, unauthenticated Kalshi API base (works for ALL markets). :contentReference[oaicite:3]{index=3}
-      const API_BASE = "https://api.elections.kalshi.com/trade-api/v2";
-
-      // Pick N markets closest to 50¢ (50%).
-      const PICK_COUNT = 4;
-
-      function centsToPct(cents) {
-        if (typeof cents !== "number") return null;
-        return (cents / 100) * 100; // 50¢ => 50%
-      }
-
-      function safeNum(x) {
-        return (typeof x === "number" && isFinite(x)) ? x : null;
-      }
-
-      // Use yes_price if present; otherwise fall back to last_price if present.
-      function getProbCents(m) {
-        const yp = safeNum(m.yes_price);
-        if (yp !== null) return yp;
-        const lp = safeNum(m.last_price);
-        if (lp !== null) return lp;
-        return null;
-      }
-
-      function marketUrlFromTicker(marketTicker) {
-        // Generic deep link to market ticker page
-        return `https://kalshi.com/markets/${marketTicker}`;
-      }
-
-      async function loadNear50ForEvent(eventTicker, container) {
-        container.innerHTML = `
-          <div class="mini-title">Closest to 50%</div>
-          <div class="muted">Loading…</div>
-        `;
-
-        try {
-          // Pull open markets for this event. yes_price is included in this response. :contentReference[oaicite:4]{index=4}
-          const url = `${API_BASE}/markets?event_ticker=${encodeURIComponent(eventTicker)}&status=open&limit=200`;
-          const res = await fetch(url, { headers: { "accept": "application/json" } });
-          if (!res.ok) throw new Error(`HTTP ${res.status}`);
-          const data = await res.json();
-
-          const markets = Array.isArray(data.markets) ? data.markets : [];
-          const scored = markets
-            .map(m => {
-              const p = getProbCents(m);
-              if (p === null) return null;
-              return {
-                ticker: m.ticker,
-                title: m.title || m.ticker,
-                yes_price: p,
-                dist: Math.abs(p - 50)
-              };
-            })
-            .filter(Boolean)
-            .sort((a, b) => a.dist - b.dist)
-            .slice(0, PICK_COUNT);
-
-          if (!scored.length) {
-            container.innerHTML = `
-              <div class="mini-title">Closest to 50%</div>
-              <div class="muted">No open markets found (or prices unavailable).</div>
-            `;
-            return;
-          }
-
-          const rows = scored.map(s => {
-            const pct = centsToPct(s.yes_price);
-            const pctText = (pct === null) ? "—" : `${pct.toFixed(0)}%`;
-            const priceText = `${s.yes_price}¢`;
-            return `
-              <a class="mini-row" href="${marketUrlFromTicker(s.ticker)}" target="_blank" rel="noreferrer">
-                <div>
-                  <div class="mini-name">${escapeHtml(s.title)}</div>
-                  <div class="mini-sub">${escapeHtml(s.ticker)} • ${pctText} implied</div>
-                </div>
-                <div class="mini-price">${priceText}</div>
-              </a>
-            `;
-          }).join("");
-
-          container.innerHTML = `
-            <div class="mini-title">Closest to 50%</div>
-            ${rows}
-            <div class="muted" style="margin-top:10px;">
-              Showing ${scored.length} closest contracts by YES price (¢ ≈ %). :contentReference[oaicite:5]{index=5}
-            </div>
-          `;
-        } catch (err) {
-          container.innerHTML = `
-            <div class="mini-title">Closest to 50%</div>
-            <div class="muted">Couldn’t load this event right now.</div>
-          `;
-        }
-      }
-
-      function escapeHtml(str) {
-        return String(str)
-          .replaceAll("&", "&amp;")
-          .replaceAll("<", "&lt;")
-          .replaceAll(">", "&gt;")
-          .replaceAll('"', "&quot;")
-          .replaceAll("'", "&#039;");
-      }
-
-      async function refreshAll() {
-        const nodes = document.querySelectorAll("[data-event]");
-        await Promise.all(Array.from(nodes).map(n => loadNear50ForEvent(n.dataset.event, n)));
-      }
-
-      document.getElementById("refreshBtn").addEventListener("click", refreshAll);
-
-      // Initial load
-      refreshAll();
-    </script>
   </body>
 </html>
