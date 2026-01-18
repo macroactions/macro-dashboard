@@ -7,68 +7,66 @@
 
     <style>
       :root {
-        --bg: #ffffff;
-        --section: #f2f2f2;
-        --card: #ffffff;
-        --label: #f6f6f6;
+        --page-bg: #ffffff;
+        --section-bg: #f2f2f2;
+        --card-bg: #ffffff;
+        --soft-bg: #f6f7f9;
+        --border: rgba(0, 0, 0, 0.14);
+        --border-strong: rgba(0, 0, 0, 0.22);
         --text: #111;
-        --muted: #666;
-        --border: #111;
-        --radius: 14px;
-        --shadow: 0 10px 25px rgba(0, 0, 0, 0.06);
+        --muted: rgba(0, 0, 0, 0.62);
+        --radius-lg: 18px;
+        --radius-md: 14px;
+        --shadow: 0 1px 0 rgba(0, 0, 0, 0.04);
       }
 
+      * { box-sizing: border-box; }
       body {
         margin: 0;
         font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-        background: var(--bg);
+        background: var(--page-bg);
         color: var(--text);
       }
 
-      /* TOP NAV */
-      .nav {
+      /* Top nav */
+      .topbar {
         position: sticky;
         top: 0;
         z-index: 10;
-        background: rgba(255, 255, 255, 0.9);
+        background: rgba(255, 255, 255, 0.92);
         backdrop-filter: blur(10px);
-        border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+        border-bottom: 1px solid var(--border);
       }
-      .nav-inner {
+      .topbar-inner {
         max-width: 1400px;
         margin: 0 auto;
         padding: 12px 18px;
         display: flex;
         align-items: center;
         justify-content: space-between;
-        gap: 16px;
+        gap: 12px;
       }
-      .brand {
-        font-weight: 700;
-        letter-spacing: 0.2px;
-      }
+      .brand { font-weight: 800; letter-spacing: 0.2px; }
+      .nav { display: flex; gap: 8px; flex-wrap: wrap; justify-content: flex-end; }
       .nav a {
         text-decoration: none;
         color: var(--text);
-        font-weight: 600;
-        font-size: 14px;
-        padding: 8px 10px;
-        border-radius: 10px;
+        font-weight: 700;
+        font-size: 13px;
+        padding: 8px 12px;
+        border-radius: 999px;
+        border: 1px solid transparent;
       }
-      .nav a:hover {
-        background: rgba(0, 0, 0, 0.06);
-      }
-      .nav-links {
-        display: flex;
-        gap: 6px;
-        flex-wrap: wrap;
-        justify-content: flex-end;
+      .nav a:hover,
+      .nav a.active {
+        border-color: var(--border);
+        background: var(--soft-bg);
       }
 
-      /* SECTION */
+      /* Section */
       .section {
-        background: var(--section);
-        padding: 44px 18px 56px;
+        background: var(--section-bg);
+        padding: 36px 18px 56px;
       }
       .section-inner {
         max-width: 1400px;
@@ -78,589 +76,299 @@
       .page-title {
         text-align: center;
         font-size: 28px;
-        font-weight: 800;
-        margin: 6px 0 26px;
-        letter-spacing: -0.2px;
+        font-weight: 900;
+        margin: 10px 0 6px;
+        letter-spacing: 0.2px;
       }
       .page-subtitle {
         text-align: center;
-        margin: -14px 0 26px;
+        margin: 0 0 22px;
         color: var(--muted);
-        font-size: 14px;
-        font-weight: 600;
+        font-size: 13px;
+        font-weight: 650;
       }
 
-      /* LAYOUT GRID */
-      .region-grid {
+      /* Layout */
+      .row {
         display: grid;
-        grid-template-columns: 1.15fr 0.85fr;
+        grid-template-columns: 1fr;
         gap: 18px;
-        margin-bottom: 22px;
       }
-      .regions {
+      .grid2 {
         display: grid;
-        grid-template-columns: 1fr 1fr;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
         gap: 18px;
+      }
+      @media (max-width: 980px) {
+        .grid2 { grid-template-columns: 1fr; }
       }
 
-      /* CARDS */
+      /* Cards */
       .card {
-        background: var(--card);
-        border: 1px solid rgba(0, 0, 0, 0.12);
-        border-radius: var(--radius);
+        background: var(--card-bg);
+        border: 1px solid var(--border);
+        border-radius: var(--radius-lg);
         box-shadow: var(--shadow);
-        overflow: hidden;
+        padding: 14px;
       }
-      .card-header {
+      .card-head {
         display: flex;
         align-items: baseline;
         justify-content: space-between;
+        gap: 12px;
+        margin-bottom: 10px;
+      }
+      .label {
+        display: inline-flex;
+        align-items: center;
         gap: 10px;
-        padding: 14px 16px;
-        border-bottom: 1px solid rgba(0, 0, 0, 0.08);
-        background: linear-gradient(to bottom, rgba(0, 0, 0, 0.02), rgba(0, 0, 0, 0));
-      }
-      .card-title {
+        background: var(--soft-bg);
+        border: 1px solid rgba(0, 0, 0, 0.12);
+        border-radius: var(--radius-md);
+        padding: 10px 14px;
         font-size: 18px;
-        font-weight: 800;
-        letter-spacing: -0.1px;
+        font-weight: 900;
+        line-height: 1.1;
       }
-      .card-meta {
+      .meta {
         font-size: 12px;
-        font-weight: 650;
-        color: var(--muted);
+        font-weight: 800;
+        color: rgba(0, 0, 0, 0.65);
         white-space: nowrap;
       }
-      .card-body {
-        padding: 14px 16px 16px;
-      }
 
-      /* LABEL PILL */
-      .label-pill {
-        display: inline-block;
-        background: var(--label);
-        border: 1px solid rgba(0, 0, 0, 0.12);
-        border-radius: 999px;
-        padding: 8px 12px;
-        font-size: 14px;
-        font-weight: 800;
-        letter-spacing: -0.1px;
-        margin-bottom: 12px;
-      }
-
-      /* TABLE */
-      table {
-        width: 100%;
-        border-collapse: collapse;
-        font-size: 14px;
-      }
-      th,
-      td {
-        padding: 10px 8px;
-        border-bottom: 1px solid rgba(0, 0, 0, 0.08);
-      }
-      th {
-        text-align: left;
-        font-size: 12px;
-        letter-spacing: 0.3px;
-        text-transform: uppercase;
-        color: var(--muted);
-      }
-      td:last-child {
-        text-align: right;
-        font-variant-numeric: tabular-nums;
-        font-weight: 800;
-      }
-      .muted {
-        color: var(--muted);
-        font-weight: 650;
-      }
-
-      /* CURVE (SVG) */
-      .curve-wrap {
-        border: 1px solid rgba(0, 0, 0, 0.12);
-        border-radius: var(--radius);
+      /* Curve embed */
+      .embed {
+        border: 1px solid var(--border-strong);
+        border-radius: var(--radius-lg);
         overflow: hidden;
         background: #fff;
+        height: 520px;
       }
-      .curve-top {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        gap: 10px;
-        padding: 10px 12px;
-        border-bottom: 1px solid rgba(0, 0, 0, 0.08);
-        background: rgba(0, 0, 0, 0.02);
-      }
-      .curve-top .left {
-        font-weight: 850;
-        letter-spacing: -0.1px;
-      }
-      .curve-top .right {
-        color: var(--muted);
-        font-weight: 650;
-        font-size: 12px;
-      }
-      .curve-svg {
+      iframe {
         width: 100%;
-        height: 260px;
+        height: 100%;
+        border: 0;
         display: block;
       }
 
-      /* PLACEHOLDER / ERR */
-      .notice {
-        padding: 12px 12px;
-        border: 1px dashed rgba(0, 0, 0, 0.25);
-        border-radius: var(--radius);
-        background: rgba(0, 0, 0, 0.02);
-        color: var(--muted);
-        font-weight: 650;
-        font-size: 13px;
+      /* Bottom-row strip */
+      .strip {
+        margin-top: 12px;
+        border: 1px solid rgba(0,0,0,0.12);
+        border-radius: var(--radius-lg);
+        background: #fff;
+        overflow: hidden;
       }
-      .error {
-        color: #8b0000;
-        background: rgba(139, 0, 0, 0.06);
-        border-color: rgba(139, 0, 0, 0.25);
+      .strip-top {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 12px;
+        padding: 10px 12px;
+        background: rgba(0,0,0,0.02);
+        border-bottom: 1px solid rgba(0,0,0,0.08);
+      }
+      .strip-title {
+        font-weight: 900;
+        font-size: 13px;
+        letter-spacing: 0.2px;
+      }
+      .strip-date {
+        font-weight: 800;
+        font-size: 12px;
+        color: rgba(0,0,0,0.6);
+        white-space: nowrap;
+      }
+      .chips {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        padding: 12px;
+      }
+      .chip {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 8px 10px;
+        border-radius: 999px;
+        background: var(--soft-bg);
+        border: 1px solid rgba(0,0,0,0.12);
+        font-weight: 900;
+        font-size: 12px;
+        letter-spacing: 0.2px;
+        white-space: nowrap;
+      }
+      .chip span {
+        color: rgba(0,0,0,0.6);
+        font-weight: 900;
       }
 
-      @media (max-width: 1050px) {
-        .region-grid {
-          grid-template-columns: 1fr;
-        }
-        .regions {
-          grid-template-columns: 1fr;
-        }
+      .note {
+        margin-top: 10px;
+        font-size: 12px;
+        color: rgba(0,0,0,0.55);
+        font-weight: 650;
+      }
+      .note a { color: inherit; }
+
+      .warn {
+        margin-top: 10px;
+        padding: 10px 12px;
+        border-radius: var(--radius-md);
+        border: 1px dashed rgba(0,0,0,0.25);
+        background: rgba(0,0,0,0.02);
+        font-size: 12px;
+        color: rgba(0,0,0,0.6);
+        font-weight: 650;
       }
     </style>
   </head>
 
   <body>
-    <div class="nav">
-      <div class="nav-inner">
+    <div class="topbar">
+      <div class="topbar-inner">
         <div class="brand">Macro Dashboard</div>
-        <div class="nav-links">
+        <div class="nav">
           <a href="index.html">Home</a>
-          <a href="domestic.html">Domestic</a>
+          <a href="domestic.html">Equity Indices</a>
+          <a class="active" href="yields.html">Fixed Income</a>
           <a href="events.html">Event Markets</a>
-          <a href="yields.html">Yields</a>
+          <a href="commodities.html">Commodities</a>
         </div>
       </div>
     </div>
 
     <section class="section">
       <div class="section-inner">
-        <div class="page-title">Yield Curves</div>
-        <div class="page-subtitle">Live curve + live table (US + Euro Area first)</div>
+        <div class="page-title">Fixed Income</div>
+        <div class="page-subtitle">US Treasury yield curve + latest daily yield curve row</div>
 
-        <!-- US -->
-        <div class="region-grid">
+        <div class="row">
           <div class="card">
-            <div class="card-header">
-              <div class="card-title">United States — Treasuries</div>
-              <div class="card-meta" id="us-updated">Loading…</div>
+            <div class="card-head">
+              <div class="label">United States — Treasuries</div>
+              <div class="meta" id="us-meta">Loading…</div>
             </div>
-            <div class="card-body">
-              <div class="label-pill">Curve</div>
-              <div class="curve-wrap">
-                <div class="curve-top">
-                  <div class="left" id="us-curve-title">Treasury Constant Maturity (latest)</div>
-                  <div class="right" id="us-curve-date">—</div>
-                </div>
-                <svg class="curve-svg" id="us-curve" viewBox="0 0 900 260" preserveAspectRatio="none"></svg>
-              </div>
-              <div style="height: 12px"></div>
-              <div class="notice muted">
-                Source: OFR Short-term Funding Monitor API (no key). Data typically posts most weekdays for the prior trading day.
-              </div>
-            </div>
-          </div>
 
-          <div class="card">
-            <div class="card-header">
-              <div class="card-title">United States — Table</div>
-              <div class="card-meta" id="us-table-meta">—</div>
+            <!-- Yield curve visual embed -->
+            <div class="embed">
+              <iframe
+                src="https://www.ustreasuryyieldcurve.com/"
+                loading="lazy"
+                referrerpolicy="no-referrer"
+              ></iframe>
             </div>
-            <div class="card-body">
-              <div class="label-pill">Yields</div>
-              <table>
-                <thead>
-                  <tr>
-                    <th>Maturity</th>
-                    <th>Yield</th>
-                  </tr>
-                </thead>
-                <tbody id="us-table">
-                  <tr><td class="muted">Loading…</td><td class="muted">—</td></tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </div>
 
-        <!-- EURO AREA -->
-        <div class="region-grid">
-          <div class="card">
-            <div class="card-header">
-              <div class="card-title">Euro Area — AAA Spot Curve</div>
-              <div class="card-meta" id="eu-updated">Loading…</div>
-            </div>
-            <div class="card-body">
-              <div class="label-pill">Curve</div>
-              <div class="curve-wrap">
-                <div class="curve-top">
-                  <div class="left" id="eu-curve-title">ECB Yield Curve Spot Rates (latest)</div>
-                  <div class="right" id="eu-curve-date">—</div>
-                </div>
-                <svg class="curve-svg" id="eu-curve" viewBox="0 0 900 260" preserveAspectRatio="none"></svg>
+            <!-- Latest bottom row from Treasury CSV -->
+            <div class="strip">
+              <div class="strip-top">
+                <div class="strip-title">Daily Treasury Yield Curve Rates (latest row)</div>
+                <div class="strip-date" id="treasury-latest-date">—</div>
               </div>
-              <div style="height: 12px"></div>
-              <div class="notice muted">
-                Source: ECB Data Portal API. Series are euro-area AAA spot rates by maturity.
+              <div class="chips" id="treasury-bottom-row">
+                <div class="chip"><span>Loading…</span></div>
               </div>
             </div>
-          </div>
 
-          <div class="card">
-            <div class="card-header">
-              <div class="card-title">Euro Area — Table</div>
-              <div class="card-meta" id="eu-table-meta">—</div>
+            <div class="note">
+              Sources:
+              <a href="https://www.ustreasuryyieldcurve.com/" target="_blank" rel="noreferrer">USTreasuryYieldCurve.com</a>
+              •
+              <a
+                href="https://home.treasury.gov/resource-center/data-chart-center/interest-rates/TextView?type=daily_treasury_yield_curve&field_tdr_date_value=2026"
+                target="_blank"
+                rel="noreferrer"
+              >Treasury daily yield curve (2026)</a>
             </div>
-            <div class="card-body">
-              <div class="label-pill">Spot rates</div>
-              <table>
-                <thead>
-                  <tr>
-                    <th>Maturity</th>
-                    <th>Rate</th>
-                  </tr>
-                </thead>
-                <tbody id="eu-table">
-                  <tr><td class="muted">Loading…</td><td class="muted">—</td></tr>
-                </tbody>
-              </table>
+
+            <div class="warn" id="embed-warn" style="display:none;">
+              If the curve panel appears blank, that site is blocking embedding. You can still click the source link above.
             </div>
           </div>
         </div>
-
-        <!-- PLACEHOLDERS (we can wire these next) -->
-        <div class="regions">
-          <div class="card">
-            <div class="card-header">
-              <div class="card-title">Japan — JGB Curve</div>
-              <div class="card-meta">Next</div>
-            </div>
-            <div class="card-body">
-              <div class="notice">
-                Next step: wire Japan with a free, no-key source that provides multiple maturities in one endpoint (so we can draw a real curve + table like US/EU).
-              </div>
-            </div>
-          </div>
-
-          <div class="card">
-            <div class="card-header">
-              <div class="card-title">China — CGB Curve</div>
-              <div class="card-meta">Next</div>
-            </div>
-            <div class="card-body">
-              <div class="notice">
-                Next step: wire China the same way (curve + table from a stable public endpoint). If you’re okay with “daily official” instead of “tick-by-tick,” we can usually keep it free.
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div style="height: 14px"></div>
       </div>
     </section>
 
     <script>
-      // --------- tiny helpers ----------
-      const fmtPct = (x) => (x === null || x === undefined || Number.isNaN(x) ? "—" : `${x}%`);
-      const fmt2 = (x) => (x === null || x === undefined || Number.isNaN(x) ? null : Number(x).toFixed(3));
-      const todayISO = () => new Date().toISOString().slice(0, 10);
+      // --- Treasury "bottom row" pull ---
+      // We fetch Treasury's CSV for the year, then take the last non-empty row.
+      const TREASURY_CSV =
+        "https://home.treasury.gov/resource-center/data-chart-center/interest-rates/" +
+        "daily-treasury-rates.csv/2026/all?_format=csv&field_tdr_date_value=2026&type=daily_treasury_yield_curve";
 
-      function setText(id, text) {
-        const el = document.getElementById(id);
-        if (el) el.textContent = text;
+      function parseCSVLine(line) {
+        // Simple CSV splitter (Treasury CSV is straightforward; no quoted commas expected)
+        return line.split(",").map(s => s.trim());
       }
 
-      function renderTable(tbodyId, rows) {
-        const tbody = document.getElementById(tbodyId);
-        if (!tbody) return;
-        tbody.innerHTML = rows
-          .map(
-            (r) =>
-              `<tr><td>${r.label}</td><td>${r.value}</td></tr>`
-          )
-          .join("");
-      }
-
-      // Simple SVG curve renderer (clean, modern)
-      function renderCurve(svgId, points, opts = {}) {
-        const svg = document.getElementById(svgId);
-        if (!svg) return;
-
-        const W = 900,
-          H = 260;
-        const padL = 48,
-          padR = 18,
-          padT = 18,
-          padB = 40;
-
-        svg.innerHTML = "";
-
-        if (!points || points.length < 2) {
-          svg.innerHTML = `<text x="20" y="40" fill="#666" font-size="14" font-weight="650">No data</text>`;
-          return;
+      function buildChips(headers, values) {
+        // headers includes "Date" then maturities. values same length.
+        const chips = [];
+        for (let i = 1; i < headers.length && i < values.length; i++) {
+          const h = headers[i];
+          const v = values[i];
+          if (!h || !v) continue;
+          chips.push({ m: h, y: v });
         }
-
-        const xs = points.map((p) => p.x);
-        const ys = points.map((p) => p.y);
-
-        const xmin = Math.min(...xs);
-        const xmax = Math.max(...xs);
-
-        // Give a little breathing room on y
-        let ymin = Math.min(...ys);
-        let ymax = Math.max(...ys);
-        const padY = (ymax - ymin) * 0.12 || 0.5;
-        ymin -= padY;
-        ymax += padY;
-
-        const X = (x) => padL + ((x - xmin) / (xmax - xmin)) * (W - padL - padR);
-        const Y = (y) => padT + (1 - (y - ymin) / (ymax - ymin)) * (H - padT - padB);
-
-        // gridlines (3)
-        const gridCount = 3;
-        for (let i = 0; i <= gridCount; i++) {
-          const t = i / gridCount;
-          const yy = padT + t * (H - padT - padB);
-          const yVal = (ymax - t * (ymax - ymin)).toFixed(2);
-
-          svg.insertAdjacentHTML(
-            "beforeend",
-            `<line x1="${padL}" y1="${yy}" x2="${W - padR}" y2="${yy}" stroke="rgba(0,0,0,0.08)" />
-             <text x="10" y="${yy + 4}" fill="#666" font-size="12" font-weight="650">${yVal}</text>`
-          );
-        }
-
-        // x labels from provided labels
-        const labelEvery = Math.max(1, Math.floor(points.length / 6));
-        points.forEach((p, idx) => {
-          if (idx % labelEvery !== 0 && idx !== points.length - 1) return;
-          const xx = X(p.x);
-          svg.insertAdjacentHTML(
-            "beforeend",
-            `<text x="${xx}" y="${H - 14}" text-anchor="middle" fill="#666" font-size="12" font-weight="650">${p.label}</text>`
-          );
-        });
-
-        // path
-        const d = points
-          .map((p, i) => `${i === 0 ? "M" : "L"} ${X(p.x).toFixed(2)} ${Y(p.y).toFixed(2)}`)
-          .join(" ");
-
-        svg.insertAdjacentHTML(
-          "beforeend",
-          `<path d="${d}" fill="none" stroke="rgba(0,0,0,0.85)" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" />
-           <path d="${d} L ${X(points[points.length - 1].x).toFixed(2)} ${H - padB} L ${X(points[0].x).toFixed(2)} ${H - padB} Z"
-                 fill="rgba(0,0,0,0.04)" stroke="none" />`
-        );
-
-        // dots
-        points.forEach((p) => {
-          svg.insertAdjacentHTML(
-            "beforeend",
-            `<circle cx="${X(p.x).toFixed(2)}" cy="${Y(p.y).toFixed(2)}" r="3.2" fill="rgba(0,0,0,0.9)" />`
-          );
-        });
+        return chips;
       }
 
-      // --------- US: OFR STFM API (no key) ----------
-      // Docs: https://data.financialresearch.gov/v1/series/dataset?dataset=tyld  (JSON)
-      async function loadUS() {
+      async function loadTreasuryBottomRow() {
+        const meta = document.getElementById("us-meta");
+        const dateEl = document.getElementById("treasury-latest-date");
+        const rowEl = document.getElementById("treasury-bottom-row");
+
         try {
-          const end = todayISO();
-          // last ~45 days so we always capture the most recent business day
-          const start = new Date(Date.now() - 45 * 24 * 3600 * 1000).toISOString().slice(0, 10);
+          const res = await fetch(TREASURY_CSV, { cache: "no-store" });
+          if (!res.ok) throw new Error(`Treasury CSV HTTP ${res.status}`);
+          const text = await res.text();
 
-          const url =
-            "https://data.financialresearch.gov/v1/series/dataset?dataset=tyld" +
-            `&start_date=${encodeURIComponent(start)}` +
-            `&end_date=${encodeURIComponent(end)}` +
-            "&remove_nulls=true";
+          const lines = text.trim().split(/\r?\n/);
+          if (lines.length < 2) throw new Error("Treasury CSV has no data");
 
-          const res = await fetch(url);
-          if (!res.ok) throw new Error(`US fetch failed: ${res.status}`);
-          const json = await res.json();
+          const headers = parseCSVLine(lines[0]);
 
-          const ts = (json && json.timeseries) || (json.tyld && json.tyld.timeseries) || json.timeseries;
-          if (!ts) throw new Error("US payload missing timeseries");
-
-          // Mnemonics we want + mapping to readable maturity
-          const series = [
-            { key: "TYLDR-TCMR-1Mo-A", label: "1M", x: 1 / 12 },
-            { key: "TYLDR-TCMR-3Mo-A", label: "3M", x: 3 / 12 },
-            { key: "TYLDR-TCMR-6Mo-A", label: "6M", x: 6 / 12 },
-            { key: "TYLDR-TCMR-1Yr-A", label: "1Y", x: 1 },
-            { key: "TYLDR-TCMR-2Yr-A", label: "2Y", x: 2 },
-            { key: "TYLDR-TCMR-3Yr-A", label: "3Y", x: 3 },
-            { key: "TYLDR-TCMR-5Yr-A", label: "5Y", x: 5 },
-            { key: "TYLDR-TCMR-7Yr-A", label: "7Y", x: 7 },
-            { key: "TYLDR-TCMR-10Yr-A", label: "10Y", x: 10 },
-            { key: "TYLDR-TCMR-20Yr-A", label: "20Y", x: 20 },
-            { key: "TYLDR-TCMR-30Yr-A", label: "30Y", x: 30 }
-          ];
-
-          function lastValue(agg) {
-            // agg is [["YYYY-MM-DD", value], ...]
-            if (!Array.isArray(agg) || agg.length === 0) return { date: null, value: null };
-            // remove_nulls=true already helps; still scan from end
-            for (let i = agg.length - 1; i >= 0; i--) {
-              const row = agg[i];
-              if (row && row.length >= 2 && row[1] !== null && row[1] !== undefined) {
-                return { date: row[0], value: row[1] };
-              }
+          // Find last non-empty data row
+          let last = null;
+          for (let i = lines.length - 1; i >= 1; i--) {
+            const cols = parseCSVLine(lines[i]);
+            if (cols.length >= 2 && cols[0]) {
+              last = cols;
+              break;
             }
-            return { date: null, value: null };
           }
+          if (!last) throw new Error("No valid last row found");
 
-          const points = [];
-          let lastDate = null;
+          const latestDate = last[0];
+          const chips = buildChips(headers, last);
 
-          const tableRows = series.map((s) => {
-            const agg = ts[s.key]?.timeseries?.aggregation;
-            const lv = lastValue(agg);
-            if (lv.date && (!lastDate || lv.date > lastDate)) lastDate = lv.date;
+          dateEl.textContent = latestDate;
+          meta.textContent = `Latest: ${latestDate}`;
 
-            const v = lv.value === null ? null : Number(lv.value);
-            if (v !== null && !Number.isNaN(v)) {
-              points.push({ x: s.x, y: v, label: s.label });
-            }
-            return { label: s.label, value: v === null ? "—" : `${Number(v).toFixed(3)}%` };
-          });
-
-          points.sort((a, b) => a.x - b.x);
-
-          setText("us-updated", `Updated: ${lastDate || "—"}`);
-          setText("us-curve-date", lastDate || "—");
-          setText("us-table-meta", lastDate ? `As of ${lastDate}` : "—");
-
-          renderCurve("us-curve", points);
-          renderTable("us-table", tableRows);
-        } catch (e) {
-          console.error(e);
-          setText("us-updated", "Error");
-          setText("us-table-meta", "Error");
-          const tbody = document.getElementById("us-table");
-          if (tbody) {
-            tbody.innerHTML = `<tr><td class="muted">Could not load</td><td class="muted">—</td></tr>`;
-          }
-          const svg = document.getElementById("us-curve");
-          if (svg) {
-            svg.innerHTML = `<text x="20" y="40" fill="#8b0000" font-size="14" font-weight="650">US data failed to load</text>`;
-          }
+          rowEl.innerHTML = chips
+            .map(c => `<div class="chip"><span>${c.m}</span>${c.y}%</div>`)
+            .join("");
+        } catch (err) {
+          console.error(err);
+          meta.textContent = "Table failed to load";
+          dateEl.textContent = "—";
+          rowEl.innerHTML = `<div class="chip"><span>Error</span>Could not load Treasury data</div>`;
         }
       }
 
-      // --------- Euro Area: ECB Data Portal API (CSV) ----------
-      // Example format: https://data-api.ecb.europa.eu/service/data/EXR/... ?format=csvdata  (CSV) :contentReference[oaicite:2]{index=2}
-      async function fetchEcbLast(seriesKey) {
-        // pull ~45 days to ensure we get the latest businessweek obs
-        const end = todayISO();
-        const start = new Date(Date.now() - 60 * 24 * 3600 * 1000).toISOString().slice(0, 10);
+      // --- Embed warning (best-effort) ---
+      // If the iframe is blocked by X-Frame-Options/CSP, it will usually stay blank.
+      // We can't reliably detect that in JS due to cross-origin restrictions,
+      // but we can still show a friendly fallback hint after a short delay.
+      setTimeout(() => {
+        const warn = document.getElementById("embed-warn");
+        if (warn) warn.style.display = "block";
+      }, 2500);
 
-        const url =
-          "https://data-api.ecb.europa.eu/service/data/YC/" +
-          encodeURIComponent(seriesKey) +
-          `?startPeriod=${encodeURIComponent(start)}` +
-          `&endPeriod=${encodeURIComponent(end)}` +
-          "&format=csvdata";
-
-        const res = await fetch(url);
-        if (!res.ok) throw new Error(`ECB fetch failed: ${res.status} (${seriesKey})`);
-        const text = await res.text();
-
-        // CSV format: header then rows; last column is usually OBS_VALUE.
-        // We'll parse last non-empty data row and extract TIME_PERIOD and OBS_VALUE.
-        const lines = text.trim().split("\n");
-        if (lines.length < 2) return { date: null, value: null };
-
-        const header = lines[0].split(",");
-        const timeIdx = header.indexOf("TIME_PERIOD");
-        const valIdx = header.indexOf("OBS_VALUE");
-        if (timeIdx === -1 || valIdx === -1) return { date: null, value: null };
-
-        for (let i = lines.length - 1; i >= 1; i--) {
-          const cols = lines[i].split(",");
-          const d = cols[timeIdx];
-          const v = cols[valIdx];
-          if (d && v && v !== "") return { date: d, value: Number(v) };
-        }
-        return { date: null, value: null };
-      }
-
-      async function loadEU() {
-        try {
-          // AAA spot curve points (ECB Svensson, continuous compounding) :contentReference[oaicite:3]{index=3}
-          const series = [
-            { key: "YC.B.U2.EUR.4F.G_N_A.SV_C_YM.SR_3M", label: "3M", x: 0.25 },
-            { key: "YC.B.U2.EUR.4F.G_N_A.SV_C_YM.SR_6M", label: "6M", x: 0.5 },
-            { key: "YC.B.U2.EUR.4F.G_N_A.SV_C_YM.SR_1Y", label: "1Y", x: 1 },
-            { key: "YC.B.U2.EUR.4F.G_N_A.SV_C_YM.SR_2Y", label: "2Y", x: 2 },
-            { key: "YC.B.U2.EUR.4F.G_N_A.SV_C_YM.SR_5Y", label: "5Y", x: 5 },
-            { key: "YC.B.U2.EUR.4F.G_N_A.SV_C_YM.SR_10Y", label: "10Y", x: 10 },
-            { key: "YC.B.U2.EUR.4F.G_N_A.SV_C_YM.SR_20Y", label: "20Y", x: 20 },
-            { key: "YC.B.U2.EUR.4F.G_N_A.SV_C_YM.SR_30Y", label: "30Y", x: 30 }
-          ];
-
-          const results = await Promise.all(
-            series.map(async (s) => {
-              const lv = await fetchEcbLast(s.key);
-              return { ...s, ...lv };
-            })
-          );
-
-          let lastDate = null;
-          const points = [];
-          const tableRows = results.map((r) => {
-            if (r.date && (!lastDate || r.date > lastDate)) lastDate = r.date;
-            const v = r.value === null ? null : Number(r.value);
-            if (v !== null && !Number.isNaN(v)) points.push({ x: r.x, y: v, label: r.label });
-            return { label: r.label, value: v === null ? "—" : `${Number(v).toFixed(3)}%` };
-          });
-
-          points.sort((a, b) => a.x - b.x);
-
-          setText("eu-updated", `Updated: ${lastDate || "—"}`);
-          setText("eu-curve-date", lastDate || "—");
-          setText("eu-table-meta", lastDate ? `As of ${lastDate}` : "—");
-
-          renderCurve("eu-curve", points);
-          renderTable("eu-table", tableRows);
-        } catch (e) {
-          console.error(e);
-          setText("eu-updated", "Error");
-          setText("eu-table-meta", "Error");
-          const tbody = document.getElementById("eu-table");
-          if (tbody) {
-            tbody.innerHTML = `<tr><td class="muted">Could not load</td><td class="muted">—</td></tr>`;
-          }
-          const svg = document.getElementById("eu-curve");
-          if (svg) {
-            svg.innerHTML = `<text x="20" y="40" fill="#8b0000" font-size="14" font-weight="650">EU data failed to load</text>`;
-          }
-        }
-      }
-
-      // Initial load + refresh
-      async function refreshAll() {
-        await Promise.all([loadUS(), loadEU()]);
-      }
-
-      refreshAll();
-      // refresh every 60 seconds (safe for free endpoints)
-      setInterval(refreshAll, 60 * 1000);
+      loadTreasuryBottomRow();
+      // Refresh the bottom row every 5 minutes
+      setInterval(loadTreasuryBottomRow, 5 * 60 * 1000);
     </script>
   </body>
 </html>
