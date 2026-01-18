@@ -14,7 +14,7 @@
         --border: rgba(0, 0, 0, 0.14);
         --border-strong: rgba(0, 0, 0, 0.22);
         --text: #111;
-        --muted: rgba(0, 0, 0, 0.6);
+        --muted: rgba(0, 0, 0, 0.62);
         --radius-lg: 18px;
         --radius-md: 14px;
         --shadow: 0 1px 0 rgba(0, 0, 0, 0.04);
@@ -28,6 +28,7 @@
         color: var(--text);
       }
 
+      /* Top nav */
       .topbar {
         position: sticky;
         top: 0;
@@ -43,25 +44,33 @@
         display: flex;
         align-items: center;
         justify-content: space-between;
-        gap: 10px;
+        gap: 12px;
       }
-      .brand { font-weight: 800; letter-spacing: 0.2px; }
-      .nav { display: flex; gap: 8px; flex-wrap: wrap; }
+      .brand {
+        font-weight: 800;
+        letter-spacing: 0.2px;
+      }
+      .nav {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+      }
       .nav a {
         text-decoration: none;
         color: var(--text);
-        font-size: 13px;
         font-weight: 700;
+        font-size: 13px;
         padding: 8px 12px;
         border-radius: 999px;
         border: 1px solid transparent;
       }
       .nav a:hover,
       .nav a.active {
-        background: var(--soft-bg);
         border-color: var(--border);
+        background: var(--soft-bg);
       }
 
+      /* Page section */
       .section {
         background: var(--section-bg);
         padding: 36px 18px 56px;
@@ -74,51 +83,88 @@
       .page-title {
         text-align: center;
         font-size: 28px;
-        font-weight: 800;
+        font-weight: 900;
         margin: 10px 0 6px;
+        letter-spacing: 0.2px;
       }
       .page-subtitle {
         text-align: center;
-        font-size: 13px;
+        margin: 0 0 22px;
         color: var(--muted);
-        margin-bottom: 22px;
+        font-size: 13px;
       }
+
+      .chips {
+        display: flex;
+        justify-content: center;
+        gap: 10px;
+        flex-wrap: wrap;
+        margin: 10px 0 24px;
+      }
+      .chip {
+        text-decoration: none;
+        color: var(--text);
+        font-weight: 800;
+        font-size: 12px;
+        background: var(--soft-bg);
+        border: 1px solid rgba(0, 0, 0, 0.12);
+        border-radius: 999px;
+        padding: 8px 12px;
+      }
+      .chip:hover { border-color: var(--border-strong); }
 
       .block-title {
-        font-size: 20px;
+        font-size: 18px;
         font-weight: 900;
-        margin: 32px 0 6px;
+        margin: 28px 0 8px;
+        letter-spacing: 0.2px;
       }
       .block-desc {
-        font-size: 13px;
+        margin: 0 0 14px;
         color: var(--muted);
-        margin-bottom: 14px;
+        font-size: 13px;
       }
 
+      /* Layout rows */
+      .row {
+        display: grid;
+        grid-template-columns: 2fr 1fr;
+        gap: 18px;
+        align-items: start;
+      }
+      @media (max-width: 1100px) {
+        .row { grid-template-columns: 1fr; }
+      }
+
+      /* Grids */
       .grid {
         display: grid;
         grid-template-columns: repeat(2, minmax(0, 1fr));
         gap: 18px;
       }
-      @media (max-width: 900px) {
+      @media (max-width: 980px) {
         .grid { grid-template-columns: 1fr; }
       }
 
+      /* Cards */
       .card {
         background: var(--card-bg);
         border: 1px solid var(--border);
         border-radius: var(--radius-lg);
-        padding: 14px;
         box-shadow: var(--shadow);
+        padding: 14px;
       }
       .card-head {
         display: flex;
         align-items: center;
         justify-content: space-between;
-        gap: 10px;
+        gap: 12px;
         margin-bottom: 10px;
       }
       .label {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
         background: var(--soft-bg);
         border: 1px solid rgba(0, 0, 0, 0.12);
         border-radius: var(--radius-md);
@@ -129,7 +175,7 @@
       }
       .source {
         font-size: 11px;
-        font-weight: 800;
+        font-weight: 900;
         padding: 6px 10px;
         border-radius: 999px;
         border: 1px solid rgba(0, 0, 0, 0.12);
@@ -152,9 +198,36 @@
         display: block;
       }
 
+      /* Watchlist */
+      .watchlist-title {
+        font-size: 14px;
+        font-weight: 900;
+        margin: 0 0 10px;
+      }
+      .watch-item {
+        display: block;
+        text-decoration: none;
+        color: var(--text);
+        border: 1px solid rgba(0, 0, 0, 0.12);
+        background: var(--soft-bg);
+        border-radius: var(--radius-md);
+        padding: 10px 12px;
+        margin-bottom: 10px;
+        font-weight: 800;
+        font-size: 13px;
+        line-height: 1.25;
+      }
+      .watch-item small {
+        display: block;
+        font-weight: 700;
+        color: rgba(0,0,0,0.55);
+        margin-top: 6px;
+      }
+      .watch-item:hover { border-color: var(--border-strong); }
+
       .footer {
-        margin-top: 36px;
         text-align: center;
+        margin-top: 28px;
         font-size: 12px;
         color: rgba(0, 0, 0, 0.55);
       }
@@ -169,6 +242,7 @@
           <a href="index.html">Home</a>
           <a href="domestic.html">Domestic</a>
           <a class="active" href="events.html">Event Markets</a>
+          <a href="news.html">Live News</a>
         </div>
       </div>
     </div>
@@ -177,107 +251,191 @@
       <div class="section-inner">
         <div class="page-title">Event Markets</div>
         <div class="page-subtitle">
-          Kalshi embeds (verified working) for monetary policy + fiscal risk. We can swap in newer 2026 tickers next.
+          Kalshi embeds + a curated Polymarket watchlist (macro, policy, geopolitics).
+        </div>
+
+        <div class="chips">
+          <a class="chip" href="#monetary">Monetary Policy</a>
+          <a class="chip" href="#politics">Politics & Governance</a>
+          <a class="chip" href="#geo">Geopolitics</a>
         </div>
 
         <!-- MONETARY POLICY -->
-        <div class="block-title">Monetary Policy</div>
-        <div class="block-desc">Fed decisions, inflation, and policy regime indicators.</div>
+        <div id="monetary" class="block-title">Monetary Policy</div>
+        <div class="block-desc">Fed meeting outcomes, rate-cut path, inflation and labor prints, GDP.</div>
+
+        <div class="row">
+          <div class="grid">
+            <div class="card">
+              <div class="card-head">
+                <div class="label">Fed Decision (Jan 26)</div>
+                <div class="source">Kalshi</div>
+              </div>
+              <div class="embed">
+                <iframe
+                  src="https://kalshi.com/external-widget/events-categorical/KXFEDDECISION-26JAN?color_scheme=light&period=all&widget_size=large"
+                  loading="lazy"
+                ></iframe>
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="card-head">
+                <div class="label">Rate Cut Count (to Dec 31)</div>
+                <div class="source">Kalshi</div>
+              </div>
+              <div class="embed">
+                <iframe
+                  src="https://kalshi.com/external-widget/events-categorical/KXRATECUTCOUNT-26DEC31?color_scheme=light&period=all&widget_size=large"
+                  loading="lazy"
+                ></iframe>
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="card-head">
+                <div class="label">CPI (Jan)</div>
+                <div class="source">Kalshi</div>
+              </div>
+              <div class="embed">
+                <iframe
+                  src="https://kalshi.com/external-widget/events-categorical/KXCPI-26JAN?color_scheme=light&period=all&widget_size=large"
+                  loading="lazy"
+                ></iframe>
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="card-head">
+                <div class="label">Unemployment (U-3, Jan)</div>
+                <div class="source">Kalshi</div>
+              </div>
+              <div class="embed">
+                <iframe
+                  src="https://kalshi.com/external-widget/events-categorical/KXU3-26JAN?color_scheme=light&period=all&widget_size=large"
+                  loading="lazy"
+                ></iframe>
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="card-head">
+                <div class="label">Annual GDP (2025)</div>
+                <div class="source">Kalshi</div>
+              </div>
+              <div class="embed">
+                <iframe
+                  src="https://kalshi.com/external-widget/events-categorical/KXGDPYEAR-25?color_scheme=light&period=all&widget_size=large"
+                  loading="lazy"
+                ></iframe>
+              </div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="watchlist-title">Polymarket Watchlist (Monetary)</div>
+            <a class="watch-item" target="_blank" rel="noreferrer"
+              href="https://polymarket.com/event/what-day-will-trump-announce-fed-chair-nominee">
+              What day will Trump announce Fed Chair nominee?
+              <small>Opens Polymarket</small>
+            </a>
+            <a class="watch-item" target="_blank" rel="noreferrer"
+              href="https://polymarket.com/event/fed-rate-cut-by-629">
+              Fed rate cut by 6/29?
+              <small>Opens Polymarket</small>
+            </a>
+            <a class="watch-item" target="_blank" rel="noreferrer"
+              href="https://polymarket.com/event/us-gdp-growth-in-q4-2025">
+              US GDP growth in Q4 2025
+              <small>Opens Polymarket</small>
+            </a>
+          </div>
+        </div>
+
+        <!-- POLITICS & GOVERNANCE -->
+        <div id="politics" class="block-title">Politics & Governance</div>
+        <div class="block-desc">Elections and key appointments with policy/macro impact.</div>
 
         <div class="grid">
-          <!-- Works (your original) -->
           <div class="card">
             <div class="card-head">
-              <div class="label">Fed Decision (Jan 26)</div>
+              <div class="label">President (Person)</div>
               <div class="source">Kalshi</div>
             </div>
             <div class="embed">
               <iframe
-                src="https://kalshi.com/external-widget/events-categorical/KXFEDDECISION-26JAN?color_scheme=light&period=all&widget_size=large"
+                src="https://kalshi.com/external-widget/events-categorical/KXPRESPERSON-28?color_scheme=light&period=all&widget_size=large"
                 loading="lazy"
               ></iframe>
             </div>
           </div>
 
-          <!-- Verified working example -->
           <div class="card">
             <div class="card-head">
-              <div class="label">Fed Decision (Dec 2025)</div>
+              <div class="label">Fed Chair Nominee (Person)</div>
               <div class="source">Kalshi</div>
             </div>
             <div class="embed">
               <iframe
-                src="https://kalshi.com/external-widget/events-categorical/kxfeddecision-25dec?color_scheme=light&period=all&widget_size=large"
+                src="https://kalshi.com/external-widget/events-categorical/KXFEDCHAIRNOM-29?color_scheme=light&period=all&widget_size=large"
                 loading="lazy"
               ></iframe>
             </div>
           </div>
 
-          <!-- Verified working example -->
           <div class="card">
             <div class="card-head">
-              <div class="label">Next Fed Rate Hike?</div>
+              <div class="label">House Control (2026)</div>
               <div class="source">Kalshi</div>
             </div>
             <div class="embed">
               <iframe
-                src="https://kalshi.com/external-widget/events-categorical/FEDHIKE?color_scheme=light&widget_size=large"
-                loading="lazy"
-              ></iframe>
-            </div>
-          </div>
-
-          <!-- Verified working example (Core CPI YoY) -->
-          <div class="card">
-            <div class="card-head">
-              <div class="label">Core CPI YoY (Jan 2025)</div>
-              <div class="source">Kalshi</div>
-            </div>
-            <div class="embed">
-              <iframe
-                src="https://kalshi.com/external-widgets/events/KXCPICOREYOY-25JAN/markets/KXCPICOREYOY-25JAN?color_scheme=light&widget_size=large"
+                src="https://kalshi.com/external-widget/events-categorical/CONTROLH-2026?color_scheme=light&period=all&widget_size=large"
                 loading="lazy"
               ></iframe>
             </div>
           </div>
         </div>
 
-        <!-- FISCAL -->
-        <div class="block-title">Fiscal &amp; Government</div>
-        <div class="block-desc">Shutdown risk and shutdown-duration style contracts.</div>
+        <!-- GEOPOLITICS -->
+        <div id="geo" class="block-title">Geopolitics</div>
+        <div class="block-desc">Foreign affairs events with real macro relevance (risk, energy, sanctions).</div>
 
-        <div class="grid">
-          <!-- Verified working example -->
-          <div class="card">
-            <div class="card-head">
-              <div class="label">Shutdown by Date (Example)</div>
-              <div class="source">Kalshi</div>
-            </div>
-            <div class="embed">
-              <iframe
-                src="https://kalshi.com/external-widgets/events/KXSHUTDOWNBYDATE-25MAR18/markets/KXSHUTDOWNBYDATE-25MAR18?color_scheme=light&widget_size=large"
-                loading="lazy"
-              ></iframe>
+        <div class="row">
+          <div class="grid">
+            <div class="card">
+              <div class="card-head">
+                <div class="label">Greenland Purchase</div>
+                <div class="source">Kalshi</div>
+              </div>
+              <div class="embed">
+                <iframe
+                  src="https://kalshi.com/external-widget/events-categorical/KXGREENLAND-29?color_scheme=light&period=all&widget_size=large"
+                  loading="lazy"
+                ></iframe>
+              </div>
             </div>
           </div>
 
-          <!-- Verified working example -->
           <div class="card">
-            <div class="card-head">
-              <div class="label">Shutdown Length (Jan 2026 series)</div>
-              <div class="source">Kalshi</div>
-            </div>
-            <div class="embed">
-              <iframe
-                src="https://kalshi.com/external-widget/events-categorical/kxgovshutlength-26jan01?color_scheme=light&period=all&widget_size=large"
-                loading="lazy"
-              ></iframe>
-            </div>
+            <div class="watchlist-title">Polymarket Watchlist (Geo)</div>
+
+            <a class="watch-item" target="_blank" rel="noreferrer"
+              href="https://polymarket.com/event/will-trump-acquire-greenland-before-2027">
+              Will Trump acquire Greenland before 2027?
+              <small>Opens Polymarket</small>
+            </a>
+
+            <a class="watch-item" target="_blank" rel="noreferrer"
+              href="https://polymarket.com/event/khamenei-out-as-supreme-leader-of-iran-by-january-31">
+              Khamenei out as Supreme Leader of Iran by Jan 31?
+              <small>Opens Polymarket</small>
+            </a>
           </div>
         </div>
 
         <div class="footer">
-          Next step: you send me the 2–4 exact Kalshi URLs you want (CPI Jan 2026, Shutdown 2026, etc.) and I’ll swap them into these same slots.
+          If any Kalshi tile shows blank, it means the embed ticker differs from the market slug—send me the page and I’ll correct the embed ticker 1:1.
         </div>
       </div>
     </section>
