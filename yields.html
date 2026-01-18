@@ -103,17 +103,32 @@
         color:rgba(0,0,0,.65); white-space:nowrap;
       }
 
-      /* TradingView embed frame */
-      .embed{
+      /* Chart */
+      .chart{
         border:1px solid var(--border-strong);
         border-radius:var(--radius-lg);
         overflow:hidden;
         background:#fff;
-        height:420px;
+        height:260px;
+        position:relative;
       }
+      .chart svg{width:100%; height:100%; display:block}
+      .chart .overlay{
+        position:absolute; inset:0;
+        display:flex; align-items:center; justify-content:center;
+        font-size:13px; font-weight:750;
+        color:rgba(0,0,0,.55);
+        background:rgba(255,255,255,.82);
+        opacity:0;
+        pointer-events:none;
+        transition:opacity 120ms ease;
+      }
+      .chart.loading .overlay{opacity:1}
+      .chart.failed .overlay{opacity:1}
 
-      /* Table card */
+      /* Table */
       .table-wrap{
+        margin-top:12px;
         border:1px solid rgba(0,0,0,.12);
         border-radius:var(--radius-lg);
         overflow:hidden;
@@ -128,33 +143,43 @@
       .table-title{
         font-weight:950; font-size:13px; letter-spacing:.15px;
       }
-      .btn{
-        text-decoration:none;
-        font-weight:900;
+      .tiny{
         font-size:12px;
-        padding:8px 10px;
-        border-radius:999px;
-        border:1px solid rgba(0,0,0,.12);
-        background:var(--soft-bg);
-        color:rgba(0,0,0,.8);
+        color:rgba(0,0,0,.6);
+        font-weight:750;
         white-space:nowrap;
       }
-      .btn:hover{ border-color:var(--border-strong); }
-
-      .table-body{
-        padding:12px;
-        color:rgba(0,0,0,.7);
-        font-size:13px;
-        font-weight:650;
+      table{
+        width:100%;
+        border-collapse:collapse;
       }
+      th, td{
+        padding:9px 10px;
+        border-bottom:1px solid rgba(0,0,0,.06);
+        font-size:13px;
+      }
+      th{
+        text-align:left;
+        color:rgba(0,0,0,.7);
+        font-weight:950;
+        background:rgba(0,0,0,.015);
+      }
+      td{
+        color:rgba(0,0,0,.78);
+        font-weight:700;
+      }
+      tr:last-child td{border-bottom:none}
 
       .note{
-        margin-top:10px;
+        margin-top:14px;
         font-size:12px;
         color:rgba(0,0,0,.55);
         font-weight:650;
       }
     </style>
+
+    <!-- JSZip for BoE yield-curve zip -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js" integrity="sha512-Ew3N2dM7qk9S8V7ZqFJt2FQY9Sx2bq1O2bQ3e2JfX0x8c6m9xqf9q0aX9QH6mE0GmQf2x7S7wCwQp1mJ3p3w1w==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
   </head>
 
   <body>
@@ -167,6 +192,7 @@
           <a class="active" href="yields.html">Fixed Income</a>
           <a href="events.html">Event Markets</a>
           <a href="commodities.html">Commodities</a>
+          <a href="news.html">Live News</a>
         </div>
       </div>
     </div>
@@ -174,186 +200,575 @@
     <section class="section">
       <div class="section-inner">
         <div class="page-title">Fixed Income</div>
-        <div class="page-subtitle">Yield curves + reference tables</div>
+        <div class="page-subtitle">Official yield curves + live tables by maturity</div>
 
         <div class="block-title">Yield Curves</div>
-        <div class="block-desc">Rendered with TradingView embed widgets (reliable on GitHub Pages).</div>
+        <div class="block-desc">Each chart is generated from the same official data used in its table.</div>
 
         <div class="grid">
-          <!-- US -->
-          <div class="card">
+          <!-- USA -->
+          <div class="card" id="card-us">
             <div class="card-head">
               <div class="label">United States</div>
-              <div class="meta">Yield curve (proxy)</div>
+              <div class="meta" id="meta-us">—</div>
             </div>
-            <div class="embed">
-              <!-- US10Y is the most watched anchor; we can later overlay 2Y/30Y with a multi-symbol widget -->
-              <div class="tradingview-widget-container" style="height:100%;width:100%">
-                <div class="tradingview-widget-container__widget" style="height:100%;width:100%"></div>
-                <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-advanced-chart.js" async>
-                  {
-                    "autosize": true,
-                    "symbol": "TVC:US10Y",
-                    "interval": "D",
-                    "timezone": "Etc/UTC",
-                    "theme": "light",
-                    "style": "1",
-                    "locale": "en",
-                    "hide_top_toolbar": true,
-                    "hide_legend": false,
-                    "allow_symbol_change": true,
-                    "save_image": false,
-                    "details": false,
-                    "calendar": false,
-                    "support_host": "https://www.tradingview.com"
-                  }
-                </script>
+            <div class="chart loading" id="chart-us">
+              <div class="overlay" id="overlay-us">Loading…</div>
+              <svg viewBox="0 0 800 260" preserveAspectRatio="none" aria-label="US yield curve chart">
+                <path id="line-us" d="" fill="none" stroke="rgba(0,0,0,.78)" stroke-width="3" stroke-linecap="round" />
+                <path id="grid-us" d="" fill="none" stroke="rgba(0,0,0,.08)" stroke-width="1" />
+                <path id="axis-us" d="" fill="none" stroke="rgba(0,0,0,.18)" stroke-width="1.25" />
+              </svg>
+            </div>
+            <div class="table-wrap">
+              <div class="table-top">
+                <div class="table-title">Curve (Treasury)</div>
+                <div class="tiny" id="asof-us">As of —</div>
               </div>
+              <table>
+                <thead><tr><th>Maturity</th><th>Yield (%)</th></tr></thead>
+                <tbody id="tbody-us"></tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Japan -->
+          <div class="card" id="card-jp">
+            <div class="card-head">
+              <div class="label">Japan</div>
+              <div class="meta" id="meta-jp">—</div>
+            </div>
+            <div class="chart loading" id="chart-jp">
+              <div class="overlay" id="overlay-jp">Loading…</div>
+              <svg viewBox="0 0 800 260" preserveAspectRatio="none" aria-label="Japan yield curve chart">
+                <path id="line-jp" d="" fill="none" stroke="rgba(0,0,0,.78)" stroke-width="3" stroke-linecap="round" />
+                <path id="grid-jp" d="" fill="none" stroke="rgba(0,0,0,.08)" stroke-width="1" />
+                <path id="axis-jp" d="" fill="none" stroke="rgba(0,0,0,.18)" stroke-width="1.25" />
+              </svg>
+            </div>
+            <div class="table-wrap">
+              <div class="table-top">
+                <div class="table-title">Curve (MOF)</div>
+                <div class="tiny" id="asof-jp">As of —</div>
+              </div>
+              <table>
+                <thead><tr><th>Maturity</th><th>Yield (%)</th></tr></thead>
+                <tbody id="tbody-jp"></tbody>
+              </table>
             </div>
           </div>
 
           <!-- Germany -->
-          <div class="card">
+          <div class="card" id="card-de">
             <div class="card-head">
               <div class="label">Germany</div>
-              <div class="meta">Yield curve (proxy)</div>
+              <div class="meta" id="meta-de">—</div>
             </div>
-            <div class="embed">
-              <div class="tradingview-widget-container" style="height:100%;width:100%">
-                <div class="tradingview-widget-container__widget" style="height:100%;width:100%"></div>
-                <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-advanced-chart.js" async>
-                  {
-                    "autosize": true,
-                    "symbol": "TVC:DE10Y",
-                    "interval": "D",
-                    "timezone": "Etc/UTC",
-                    "theme": "light",
-                    "style": "1",
-                    "locale": "en",
-                    "hide_top_toolbar": true,
-                    "hide_legend": false,
-                    "allow_symbol_change": true,
-                    "save_image": false,
-                    "details": false,
-                    "calendar": false,
-                    "support_host": "https://www.tradingview.com"
-                  }
-                </script>
+            <div class="chart loading" id="chart-de">
+              <div class="overlay" id="overlay-de">Loading…</div>
+              <svg viewBox="0 0 800 260" preserveAspectRatio="none" aria-label="Germany yield curve chart">
+                <path id="line-de" d="" fill="none" stroke="rgba(0,0,0,.78)" stroke-width="3" stroke-linecap="round" />
+                <path id="grid-de" d="" fill="none" stroke="rgba(0,0,0,.08)" stroke-width="1" />
+                <path id="axis-de" d="" fill="none" stroke="rgba(0,0,0,.18)" stroke-width="1.25" />
+              </svg>
+            </div>
+            <div class="table-wrap">
+              <div class="table-top">
+                <div class="table-title">Current Federal Securities (Bundesbank)</div>
+                <div class="tiny" id="asof-de">As of —</div>
               </div>
+              <table>
+                <thead><tr><th>Maturity</th><th>Yield (%)</th></tr></thead>
+                <tbody id="tbody-de"></tbody>
+              </table>
             </div>
           </div>
 
           <!-- UK -->
-          <div class="card">
+          <div class="card" id="card-uk">
             <div class="card-head">
               <div class="label">United Kingdom</div>
-              <div class="meta">Yield curve (proxy)</div>
+              <div class="meta" id="meta-uk">—</div>
             </div>
-            <div class="embed">
-              <div class="tradingview-widget-container" style="height:100%;width:100%">
-                <div class="tradingview-widget-container__widget" style="height:100%;width:100%"></div>
-                <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-advanced-chart.js" async>
-                  {
-                    "autosize": true,
-                    "symbol": "TVC:GB10Y",
-                    "interval": "D",
-                    "timezone": "Etc/UTC",
-                    "theme": "light",
-                    "style": "1",
-                    "locale": "en",
-                    "hide_top_toolbar": true,
-                    "hide_legend": false,
-                    "allow_symbol_change": true,
-                    "save_image": false,
-                    "details": false,
-                    "calendar": false,
-                    "support_host": "https://www.tradingview.com"
-                  }
-                </script>
+            <div class="chart loading" id="chart-uk">
+              <div class="overlay" id="overlay-uk">Loading…</div>
+              <svg viewBox="0 0 800 260" preserveAspectRatio="none" aria-label="UK yield curve chart">
+                <path id="line-uk" d="" fill="none" stroke="rgba(0,0,0,.78)" stroke-width="3" stroke-linecap="round" />
+                <path id="grid-uk" d="" fill="none" stroke="rgba(0,0,0,.08)" stroke-width="1" />
+                <path id="axis-uk" d="" fill="none" stroke="rgba(0,0,0,.18)" stroke-width="1.25" />
+              </svg>
+            </div>
+            <div class="table-wrap">
+              <div class="table-top">
+                <div class="table-title">Yield Curves (BoE)</div>
+                <div class="tiny" id="asof-uk">As of —</div>
               </div>
+              <table>
+                <thead><tr><th>Maturity</th><th>Yield (%)</th></tr></thead>
+                <tbody id="tbody-uk"></tbody>
+              </table>
             </div>
           </div>
 
           <!-- China -->
-          <div class="card">
+          <div class="card" id="card-cn">
             <div class="card-head">
               <div class="label">China</div>
-              <div class="meta">Yield curve (proxy)</div>
+              <div class="meta" id="meta-cn">—</div>
             </div>
-            <div class="embed">
-              <div class="tradingview-widget-container" style="height:100%;width:100%">
-                <div class="tradingview-widget-container__widget" style="height:100%;width:100%"></div>
-                <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-advanced-chart.js" async>
-                  {
-                    "autosize": true,
-                    "symbol": "TVC:CN10Y",
-                    "interval": "D",
-                    "timezone": "Etc/UTC",
-                    "theme": "light",
-                    "style": "1",
-                    "locale": "en",
-                    "hide_top_toolbar": true,
-                    "hide_legend": false,
-                    "allow_symbol_change": true,
-                    "save_image": false,
-                    "details": false,
-                    "calendar": false,
-                    "support_host": "https://www.tradingview.com"
-                  }
-                </script>
-              </div>
+            <div class="chart loading" id="chart-cn">
+              <div class="overlay" id="overlay-cn">Loading…</div>
+              <svg viewBox="0 0 800 260" preserveAspectRatio="none" aria-label="China yield curve chart">
+                <path id="line-cn" d="" fill="none" stroke="rgba(0,0,0,.78)" stroke-width="3" stroke-linecap="round" />
+                <path id="grid-cn" d="" fill="none" stroke="rgba(0,0,0,.08)" stroke-width="1" />
+                <path id="axis-cn" d="" fill="none" stroke="rgba(0,0,0,.18)" stroke-width="1.25" />
+              </svg>
             </div>
-          </div>
-        </div>
-
-        <div class="block-title" style="margin-top:28px;">Reference Tables</div>
-        <div class="block-desc">CNBC pages can’t be embedded reliably; use quick-open buttons (or we can switch to API tables).</div>
-
-        <div class="grid">
-          <div class="card">
             <div class="table-wrap">
               <div class="table-top">
-                <div class="table-title">United States — Bonds (CNBC)</div>
-                <a class="btn" href="https://www.cnbc.com/bonds/" target="_blank" rel="noreferrer">Open on CNBC</a>
+                <div class="table-title">Govt Bond Yield Curve (ChinaBond)</div>
+                <div class="tiny" id="asof-cn">As of —</div>
               </div>
-              <div class="table-body">
-                CNBC blocks iframe embedding on most static sites. If you want this table to appear here
-                with live updates, we should pull yields from a fetchable source (Treasury CSV/API) and render it.
-              </div>
-            </div>
-          </div>
-
-          <div class="card">
-            <div class="table-wrap">
-              <div class="table-top">
-                <div class="table-title">Germany — Bonds (CNBC)</div>
-                <a class="btn" href="https://www.cnbc.com/bonds/" target="_blank" rel="noreferrer">Open on CNBC</a>
-              </div>
-              <div class="table-body">
-                Same constraint as above. If you want live numbers on-page, we can source Bund yields via ECB feeds
-                (or another public dataset) and render the table here.
-              </div>
-            </div>
-          </div>
-
-          <div class="card">
-            <div class="table-wrap">
-              <div class="table-top">
-                <div class="table-title">United Kingdom — Bonds (CNBC)</div>
-                <a class="btn" href="https://www.cnbc.com/bonds/" target="_blank" rel="noreferrer">Open on CNBC</a>
-              </div>
-              <div class="table-body">
-                For an on-page table we can pull Gilt yields from a public BoE/UKDMO source (or equivalent) and render it.
-              </div>
+              <table>
+                <thead><tr><th>Maturity</th><th>Yield (%)</th></tr></thead>
+                <tbody id="tbody-cn"></tbody>
+              </table>
             </div>
           </div>
         </div>
 
         <div class="note">
-          Want the “true” yield curve (multiple maturities) instead of a 10Y proxy?
-          Next step is a multi-line TradingView embed per country (e.g., 2Y/5Y/10Y/30Y) so the curve shape is obvious.
+          If any source blocks cross-origin requests in your browser, that country will show “Load failed” without breaking the page.
         </div>
       </div>
     </section>
+
+    <script>
+      // -------------------------
+      // Helpers (safe + fast)
+      // -------------------------
+      const TIMEOUT_MS = 12000;
+
+      function withTimeout(promise, ms = TIMEOUT_MS) {
+        const ctrl = new AbortController();
+        const t = setTimeout(() => ctrl.abort(), ms);
+        return Promise.race([
+          promise(ctrl.signal).finally(() => clearTimeout(t)),
+        ]);
+      }
+
+      function el(id){ return document.getElementById(id); }
+
+      function setLoading(code, isLoading, failedMsg){
+        const chart = el(`chart-${code}`);
+        const overlay = el(`overlay-${code}`);
+        chart.classList.toggle("loading", !!isLoading);
+        chart.classList.toggle("failed", !isLoading && !!failedMsg);
+        if (isLoading) overlay.textContent = "Loading…";
+        if (failedMsg) overlay.textContent = failedMsg;
+      }
+
+      function fmt(num){
+        if (num === null || num === undefined || Number.isNaN(num)) return "—";
+        // user preference: no rounding beyond the data itself
+        // keep as-is, but normalize to string with up to 3 decimals if present
+        const s = String(num);
+        return s;
+      }
+
+      function parseCsvLines(text){
+        // Minimal CSV parser (handles quoted fields)
+        const lines = text.replace(/\r/g,"").split("\n").filter(l => l.trim().length);
+        return lines.map(line => {
+          const out = [];
+          let cur = "", inQ = false;
+          for (let i=0; i<line.length; i++){
+            const ch = line[i];
+            if (ch === '"'){
+              if (inQ && line[i+1] === '"'){ cur += '"'; i++; }
+              else inQ = !inQ;
+            } else if (ch === "," && !inQ){
+              out.push(cur);
+              cur = "";
+            } else cur += ch;
+          }
+          out.push(cur);
+          return out.map(x => x.trim());
+        });
+      }
+
+      function toTenorYears(label){
+        // returns numeric years for plotting (months -> fractional)
+        const m = String(label).toUpperCase().trim();
+        if (m.endsWith("M")) return parseFloat(m) / 12;
+        if (m.endsWith("Y")) return parseFloat(m);
+        // plain number means years
+        const n = parseFloat(m);
+        return Number.isFinite(n) ? n : null;
+      }
+
+      function renderTable(code, points){
+        const tbody = el(`tbody-${code}`);
+        tbody.innerHTML = "";
+        for (const p of points){
+          const tr = document.createElement("tr");
+          const td1 = document.createElement("td");
+          const td2 = document.createElement("td");
+          td1.textContent = p.tenor;
+          td2.textContent = fmt(p.yield);
+          tr.appendChild(td1); tr.appendChild(td2);
+          tbody.appendChild(tr);
+        }
+      }
+
+      function renderChart(code, points){
+        const line = el(`line-${code}`);
+        const grid = el(`grid-${code}`);
+        const axis = el(`axis-${code}`);
+
+        const W = 800, H = 260;
+        const padL = 42, padR = 12, padT = 12, padB = 34;
+
+        const xs = points.map(p => toTenorYears(p.tenor)).filter(v => v !== null);
+        const ys = points.map(p => Number(p.yield)).filter(v => Number.isFinite(v));
+
+        if (!xs.length || !ys.length){
+          line.setAttribute("d", "");
+          grid.setAttribute("d", "");
+          axis.setAttribute("d", "");
+          return;
+        }
+
+        const minX = Math.min(...xs), maxX = Math.max(...xs);
+        const minY = Math.min(...ys), maxY = Math.max(...ys);
+
+        const xScale = (x) => {
+          const t = (x - minX) / (maxX - minX || 1);
+          return padL + t * (W - padL - padR);
+        };
+        const yScale = (y) => {
+          const t = (y - minY) / (maxY - minY || 1);
+          return (H - padB) - t * (H - padT - padB);
+        };
+
+        // Line path
+        const pts = points
+          .map(p => ({ x: toTenorYears(p.tenor), y: Number(p.yield) }))
+          .filter(p => p.x !== null && Number.isFinite(p.y))
+          .sort((a,b)=>a.x-b.x);
+
+        let d = "";
+        for (let i=0; i<pts.length; i++){
+          const X = xScale(pts[i].x);
+          const Y = yScale(pts[i].y);
+          d += (i===0 ? "M" : "L") + X.toFixed(2) + " " + Y.toFixed(2) + " ";
+        }
+        line.setAttribute("d", d.trim());
+
+        // Grid (3 horizontal lines)
+        const y1 = padT + (H - padT - padB) * 0.25;
+        const y2 = padT + (H - padT - padB) * 0.50;
+        const y3 = padT + (H - padT - padB) * 0.75;
+        const gd =
+          `M ${padL} ${y1} L ${W-padR} ${y1} ` +
+          `M ${padL} ${y2} L ${W-padR} ${y2} ` +
+          `M ${padL} ${y3} L ${W-padR} ${y3}`;
+        grid.setAttribute("d", gd);
+
+        // Axes
+        const ad =
+          `M ${padL} ${padT} L ${padL} ${H-padB} ` +
+          `M ${padL} ${H-padB} L ${W-padR} ${H-padB}`;
+        axis.setAttribute("d", ad);
+      }
+
+      function setMeta(code, asOfText, sourceText){
+        el(`asof-${code}`).textContent = asOfText ? `As of ${asOfText}` : "As of —";
+        el(`meta-${code}`).textContent = sourceText || "—";
+      }
+
+      // -------------------------
+      // Sources (official)
+      // -------------------------
+
+      // USA (Treasury TextView HTML; parse last row)
+      async function loadUS(){
+        const year = new Date().getFullYear();
+        const url = `https://home.treasury.gov/resource-center/data-chart-center/interest-rates/TextView?field_tdr_date_value=${year}&type=daily_treasury_yield_curve`;
+
+        const html = await withTimeout(async (signal) => {
+          const r = await fetch(url, { signal, cache: "no-store" });
+          if (!r.ok) throw new Error("HTTP " + r.status);
+          return await r.text();
+        });
+
+        const doc = new DOMParser().parseFromString(html, "text/html");
+        const table = doc.querySelector("table");
+        if (!table) throw new Error("No table");
+
+        const rows = [...table.querySelectorAll("tbody tr")];
+        if (!rows.length) throw new Error("No rows");
+        const last = rows[rows.length - 1];
+        const cells = [...last.querySelectorAll("td")].map(td => td.textContent.trim());
+
+        // Treasury par yield curve table format is:
+        // Date, 1 Mo, 2 Mo, 3 Mo, 4 Mo, 6 Mo, 1 Yr, 2 Yr, 3 Yr, 5 Yr, 7 Yr, 10 Yr, 20 Yr, 30 Yr
+        const asOf = cells[0] || null;
+        const map = [
+          ["1M", cells[1]],
+          ["2M", cells[2]],
+          ["3M", cells[3]],
+          ["4M", cells[4]],
+          ["6M", cells[5]],
+          ["1Y", cells[6]],
+          ["2Y", cells[7]],
+          ["3Y", cells[8]],
+          ["5Y", cells[9]],
+          ["7Y", cells[10]],
+          ["10Y", cells[11]],
+          ["20Y", cells[12]],
+          ["30Y", cells[13]],
+        ].filter(([t,v]) => v && v !== "N/A").map(([t,v]) => ({ tenor: t, yield: v }));
+
+        return { asOf, points: map };
+      }
+
+      // Japan (MOF CSV)
+      async function loadJP(){
+        const url = "https://www.mof.go.jp/english/policy/jgbs/reference/interest_rate/jgbcme.csv";
+
+        const text = await withTimeout(async (signal) => {
+          const r = await fetch(url, { signal, cache: "no-store" });
+          if (!r.ok) throw new Error("HTTP " + r.status);
+          return await r.text();
+        });
+
+        const rows = parseCsvLines(text);
+        // Find header row that starts with Date
+        const hIdx = rows.findIndex(r => String(r[0]).toLowerCase() === "date");
+        if (hIdx < 0) throw new Error("No header");
+
+        const header = rows[hIdx];
+        const dataRows = rows.slice(hIdx + 1).filter(r => r.length >= 2);
+        if (!dataRows.length) throw new Error("No data");
+
+        const last = dataRows[dataRows.length - 1];
+        const asOf = last[0];
+
+        // Build points using common maturities
+        const want = ["1Y","2Y","3Y","5Y","7Y","10Y","20Y","30Y","40Y"];
+        const points = [];
+        for (const t of want){
+          const idx = header.findIndex(x => String(x).toUpperCase() === t);
+          if (idx > -1 && last[idx] && last[idx] !== "N/A"){
+            points.push({ tenor: t, yield: last[idx] });
+          }
+        }
+        return { asOf, points };
+      }
+
+      // Germany (Bundesbank CSV per maturity; pull latest non-empty value)
+      async function loadDE(){
+        const series = [
+          ["2Y",  "https://api.statistiken.bundesbank.de/rest/download/BBSSY/D.REN.EUR.A610.000000WT0202.A?format=csv&lang=en"],
+          ["5Y",  "https://api.statistiken.bundesbank.de/rest/download/BBSSY/D.REN.EUR.A620.000000WT0505.A?format=csv&lang=en"],
+          ["7Y",  "https://api.statistiken.bundesbank.de/rest/download/BBSSY/D.REN.EUR.A607.000000WT7070.A?format=csv&lang=en"],
+          ["10Y", "https://api.statistiken.bundesbank.de/rest/download/BBSSY/D.REN.EUR.A630.000000WT1010.A?format=csv&lang=en"],
+          ["15Y", "https://api.statistiken.bundesbank.de/rest/download/BBSSY/D.REN.EUR.A615.000000WT1515.A?format=csv&lang=en"],
+          ["30Y", "https://api.statistiken.bundesbank.de/rest/download/BBSSY/D.REN.EUR.A640.000000WT3030.A?format=csv&lang=en"],
+        ];
+
+        async function fetchLatest(url){
+          const txt = await withTimeout(async (signal) => {
+            const r = await fetch(url, { signal, cache: "no-store" });
+            if (!r.ok) throw new Error("HTTP " + r.status);
+            return await r.text();
+          });
+
+          // Bundesbank CSV is typically: DATE;VALUE;... or with delimiter ';'
+          const lines = txt.replace(/\r/g,"").split("\n").filter(l => l.trim().length);
+          // Find last data line that contains a date and a number
+          for (let i=lines.length-1; i>=0; i--){
+            const line = lines[i].trim();
+            if (!line || line.startsWith("#")) continue;
+            const parts = line.split(/[,;]\s*/);
+            const date = parts[0];
+            const val = parts.find(p => /^[+-]?\d+(\.\d+)?$/.test(p));
+            if (date && val){
+              return { date, val };
+            }
+          }
+          throw new Error("No data line");
+        }
+
+        const out = [];
+        let asOf = null;
+
+        for (const [tenor, url] of series){
+          const { date, val } = await fetchLatest(url);
+          if (!asOf) asOf = date;
+          out.push({ tenor, yield: val });
+        }
+
+        // Sort by maturity
+        out.sort((a,b)=>toTenorYears(a.tenor)-toTenorYears(b.tenor));
+
+        return { asOf, points: out };
+      }
+
+      // UK (BoE zip; parse a CSV inside; take latest row and map maturities)
+      async function loadUK(){
+        const url = "https://www.bankofengland.co.uk/-/media/boe/files/statistics/yield-curves/latest-yield-curve-data.zip";
+
+        const buf = await withTimeout(async (signal) => {
+          const r = await fetch(url, { signal, cache: "no-store" });
+          if (!r.ok) throw new Error("HTTP " + r.status);
+          return await r.arrayBuffer();
+        });
+
+        const zip = await JSZip.loadAsync(buf);
+
+        // Pick the most likely nominal curve CSV
+        const names = Object.keys(zip.files);
+        const csvName =
+          names.find(n => /nominal/i.test(n) && /\.csv$/i.test(n)) ||
+          names.find(n => /\.csv$/i.test(n)) ||
+          null;
+
+        if (!csvName) throw new Error("No CSV in zip");
+
+        const csvText = await zip.files[csvName].async("string");
+        const rows = parseCsvLines(csvText);
+
+        // Heuristic: find header row containing "Date" and multiple tenors
+        const hIdx = rows.findIndex(r => r.some(c => String(c).toLowerCase() === "date") && r.length > 10);
+        if (hIdx < 0) throw new Error("No header");
+
+        const header = rows[hIdx].map(x => String(x).trim());
+        const dataRows = rows.slice(hIdx + 1).filter(r => r.length === header.length);
+        if (!dataRows.length) throw new Error("No data");
+
+        const last = dataRows[dataRows.length - 1];
+        const asOf = last[header.findIndex(h => h.toLowerCase() === "date")] || null;
+
+        // Map typical curve tenors (BoE files often have year columns like "1", "2", ..., "30")
+        const wantYears = [1,2,3,5,7,10,20,30];
+        const points = [];
+
+        for (const y of wantYears){
+          // match exact header cell "1", "2", "3" etc OR "1Y" etc
+          let idx = header.findIndex(h => h === String(y));
+          if (idx < 0) idx = header.findIndex(h => h.toUpperCase() === `${y}Y`);
+          if (idx < 0) idx = header.findIndex(h => new RegExp(`^${y}(\\.0)?$`).test(h));
+          if (idx > -1 && last[idx] && last[idx] !== "N/A"){
+            points.push({ tenor: `${y}Y`, yield: last[idx] });
+          }
+        }
+
+        // If headers are months-based like "0.5", include 6M
+        const halfIdx = header.findIndex(h => h === "0.5" || h === "0.50" || h.toUpperCase() === "6M");
+        if (halfIdx > -1 && last[halfIdx] && last[halfIdx] !== "N/A"){
+          points.unshift({ tenor: "6M", yield: last[halfIdx] });
+        }
+
+        points.sort((a,b)=>toTenorYears(a.tenor)-toTenorYears(b.tenor));
+
+        return { asOf, points };
+      }
+
+      // China (ChinaBond page: HTML scrape with a direct download page; parse a table)
+      async function loadCN(){
+        // ChinaBond "Annual Standard Terms Data Download" landing can be scraped for the most recent year file links,
+        // but to keep this fast, we hit the English yield-curve download page and parse the on-page table if present.
+        const url = "https://yield.chinabond.com.cn/cbweb-mn/yc/downYearBzqxList?wrjxCBFlag=0&&zblx=txy&&ycDefId=2c9081e50a2f9606010a3068cae70001&&locale=en_US";
+
+        const html = await withTimeout(async (signal) => {
+          const r = await fetch(url, { signal, cache: "no-store" });
+          if (!r.ok) throw new Error("HTTP " + r.status);
+          return await r.text();
+        });
+
+        const doc = new DOMParser().parseFromString(html, "text/html");
+
+        // Try to locate a table with maturities/yields
+        const tables = [...doc.querySelectorAll("table")];
+        const table = tables.find(t => /year|maturity|term/i.test(t.textContent));
+        if (!table) throw new Error("No table");
+
+        // Extract the first table body rows that look like tenor + yield
+        const rows = [...table.querySelectorAll("tr")].map(tr => [...tr.querySelectorAll("td,th")].map(td => td.textContent.trim()));
+        const data = [];
+
+        for (const r of rows){
+          if (r.length < 2) continue;
+          const tenorRaw = r[0];
+          const yRaw = r[1];
+
+          const t = tenorRaw
+            .replace(/\s+/g," ")
+            .replace(/Years?/i,"Y")
+            .replace(/Year/i,"Y")
+            .replace(/Months?/i,"M")
+            .replace(/Month/i,"M")
+            .replace(/^(\d+)\s*Y$/i,"$1Y")
+            .replace(/^(\d+)\s*M$/i,"$1M");
+
+          const y = String(yRaw).replace(/[^\d.+-]/g,"");
+          if (!t || !y) continue;
+          if (!/^\d+(\.\d+)?[MY]$/i.test(t)) continue;
+          if (!/^[+-]?\d+(\.\d+)?$/.test(y)) continue;
+
+          data.push({ tenor: t.toUpperCase(), yield: y });
+        }
+
+        if (!data.length) throw new Error("No curve rows");
+
+        // Prefer standard set if available
+        const want = ["3M","6M","1Y","2Y","3Y","5Y","7Y","10Y","20Y","30Y"];
+        const picked = [];
+        for (const w of want){
+          const hit = data.find(d => d.tenor === w);
+          if (hit) picked.push(hit);
+        }
+        const points = picked.length ? picked : data.slice(0, 12);
+
+        points.sort((a,b)=>toTenorYears(a.tenor)-toTenorYears(b.tenor));
+
+        // Best-effort as-of (not always on table)
+        let asOf = null;
+        const m = doc.body.textContent.match(/\b(20\d{2}[-/]\d{2}[-/]\d{2})\b/);
+        if (m) asOf = m[1];
+
+        return { asOf, points };
+      }
+
+      // -------------------------
+      // Orchestrate
+      // -------------------------
+      async function runOne(code, loader, sourceLabel){
+        setLoading(code, true, null);
+        try{
+          const { asOf, points } = await loader();
+          renderTable(code, points);
+          renderChart(code, points);
+          setMeta(code, asOf || "—", sourceLabel);
+          setLoading(code, false, null);
+        } catch (e){
+          // Keep page stable, show failure overlay + empty table
+          renderTable(code, []);
+          renderChart(code, []);
+          setMeta(code, "—", sourceLabel);
+          setLoading(code, false, "Load failed");
+        }
+      }
+
+      (async function init(){
+        runOne("us", loadUS, "U.S. Treasury");
+        runOne("jp", loadJP, "Japan MOF");
+        runOne("de", loadDE, "Deutsche Bundesbank");
+        runOne("uk", loadUK, "Bank of England");
+        runOne("cn", loadCN, "ChinaBond");
+      })();
+    </script>
   </body>
 </html>
