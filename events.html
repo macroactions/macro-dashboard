@@ -28,6 +28,7 @@
         color: var(--text);
       }
 
+      /* TOP NAV */
       .topbar {
         position: sticky;
         top: 0;
@@ -58,6 +59,7 @@
         border: 1px solid var(--border);
       }
 
+      /* SECTION */
       .section {
         background: var(--section-bg);
         padding: 36px 18px 56px;
@@ -71,6 +73,7 @@
         text-align: center;
         font-size: 28px;
         font-weight: 800;
+        margin-bottom: 6px;
       }
       .page-subtitle {
         text-align: center;
@@ -99,6 +102,7 @@
         .grid { grid-template-columns: 1fr; }
       }
 
+      /* CARD */
       .card {
         background: var(--card-bg);
         border: 1px solid var(--border);
@@ -106,10 +110,10 @@
         padding: 14px;
         box-shadow: var(--shadow);
       }
-
       .card-head {
         display: flex;
         justify-content: space-between;
+        align-items: center;
         margin-bottom: 10px;
       }
       .label {
@@ -152,6 +156,7 @@
   </head>
 
   <body>
+    <!-- NAV -->
     <div class="topbar">
       <div class="topbar-inner">
         <div class="brand">Macro Dashboard</div>
@@ -163,6 +168,7 @@
       </div>
     </div>
 
+    <!-- CONTENT -->
     <section class="section">
       <div class="section-inner">
         <div class="page-title">Event Markets</div>
@@ -207,7 +213,7 @@
 
           <div class="card">
             <div class="card-head">
-              <div class="label">Fed Cuts This Year (≥1)</div>
+              <div class="label">≥1 Fed Cut This Year</div>
               <div class="source">Kalshi</div>
             </div>
             <div class="embed">
@@ -223,7 +229,7 @@
         <div class="grid">
           <div class="card">
             <div class="card-head">
-              <div class="label">Government Shutdown by Date</div>
+              <div class="label">Shutdown by Date</div>
               <div class="source">Kalshi</div>
             </div>
             <div class="embed">
@@ -233,7 +239,7 @@
 
           <div class="card">
             <div class="card-head">
-              <div class="label">Government Shutdown This Year?</div>
+              <div class="label">Shutdown This Year?</div>
               <div class="source">Kalshi</div>
             </div>
             <div class="embed">
