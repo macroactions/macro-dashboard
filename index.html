@@ -104,61 +104,60 @@
         font-weight: 650;
       }
 
-      /* Tiles */
-      .tiles {
+      /* Big tabs */
+      .tabs {
         display: grid;
         grid-template-columns: repeat(2, minmax(0, 1fr));
         gap: 18px;
       }
 
       @media (max-width: 900px) {
-        .tiles {
-          grid-template-columns: 1fr;
-        }
+        .tabs { grid-template-columns: 1fr; }
       }
 
-      .tile {
+      .tab {
         background: var(--card-bg);
         border: 1px solid var(--border);
         border-radius: var(--radius-lg);
         box-shadow: var(--shadow);
-        padding: 18px;
+        padding: 22px;
         text-decoration: none;
         color: var(--text);
         display: flex;
         flex-direction: column;
-        gap: 10px;
+        gap: 12px;
         transition: transform 120ms ease, border-color 120ms ease;
       }
 
-      .tile:hover {
+      .tab:hover {
         transform: translateY(-1px);
         border-color: var(--border-strong);
       }
 
-      .tile-title {
-        font-size: 18px;
-        font-weight: 900;
-        letter-spacing: -0.1px;
+      .tab-title {
+        font-size: 22px;
+        font-weight: 950;
+        letter-spacing: -0.2px;
         background: var(--soft-bg);
         border: 1px solid rgba(0, 0, 0, 0.12);
         border-radius: var(--radius-md);
-        padding: 10px 12px;
+        padding: 12px 14px;
         width: fit-content;
       }
 
-      .tile-desc {
+      .tab-desc {
         font-size: 13px;
         color: var(--muted);
         font-weight: 650;
         line-height: 1.35;
+        max-width: 56ch;
       }
 
-      .tile-meta {
-        margin-top: 4px;
+      .tab-meta {
+        margin-top: 2px;
         font-size: 12px;
         color: rgba(0, 0, 0, 0.52);
-        font-weight: 700;
+        font-weight: 800;
       }
 
       .footer {
@@ -176,9 +175,10 @@
         <div class="brand">Macro Dashboard</div>
         <div class="nav">
           <a class="active" href="index.html">Home</a>
-          <a href="domestic.html">Domestic</a>
+          <a href="domestic.html">Equity Indices</a>
+          <a href="yields.html">Fixed Income</a>
           <a href="events.html">Event Markets</a>
-          <a href="yields.html">Yields</a>
+          <a href="commodities.html">Commodities</a>
           <a href="news.html">Live News</a>
         </div>
       </div>
@@ -187,31 +187,31 @@
     <section class="section">
       <div class="section-inner">
         <div class="page-title">Home</div>
-        <div class="page-subtitle">Quick access to your core dashboards.</div>
+        <div class="page-subtitle">Choose a dashboard section.</div>
 
-        <div class="tiles">
-          <a class="tile" href="domestic.html">
-            <div class="tile-title">Domestic</div>
-            <div class="tile-desc">US stock indices and key domestic market snapshots.</div>
-            <div class="tile-meta">Charts + ticker tape</div>
+        <div class="tabs">
+          <a class="tab" href="domestic.html">
+            <div class="tab-title">Equity Indices</div>
+            <div class="tab-desc">Major equity benchmarks and intraday technical views.</div>
+            <div class="tab-meta">US indices • charts</div>
           </a>
 
-          <a class="tile" href="yields.html">
-            <div class="tile-title">Yields</div>
-            <div class="tile-desc">Yield curves with live tables (US + Euro Area) and expansion to Japan/China.</div>
-            <div class="tile-meta">Curve + table</div>
+          <a class="tab" href="yields.html">
+            <div class="tab-title">Fixed Income</div>
+            <div class="tab-desc">Yield curves and term structure with a live numeric table by maturity.</div>
+            <div class="tab-meta">US + global curves</div>
           </a>
 
-          <a class="tile" href="events.html">
-            <div class="tile-title">Event Markets</div>
-            <div class="tile-desc">Curated Kalshi event markets for policy, macro, and governance monitoring.</div>
-            <div class="tile-meta">Embedded markets</div>
+          <a class="tab" href="events.html">
+            <div class="tab-title">Event Markets</div>
+            <div class="tab-desc">Curated Kalshi markets for macro, policy, and governance monitoring.</div>
+            <div class="tab-meta">Embeds • quick scan</div>
           </a>
 
-          <a class="tile" href="news.html">
-            <div class="tile-title">Live News</div>
-            <div class="tile-desc">Headlines and live feeds (we’ll build this next).</div>
-            <div class="tile-meta">News + social</div>
+          <a class="tab" href="commodities.html">
+            <div class="tab-title">Commodities</div>
+            <div class="tab-desc">Energy, metals, and key commodity benchmarks and spreads.</div>
+            <div class="tab-meta">WTI • gold • more</div>
           </a>
         </div>
 
