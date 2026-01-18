@@ -21,7 +21,6 @@
       }
 
       * { box-sizing: border-box; }
-
       body {
         margin: 0;
         font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
@@ -29,7 +28,6 @@
         color: var(--text);
       }
 
-      /* Top navigation */
       .topbar {
         position: sticky;
         top: 0;
@@ -38,7 +36,6 @@
         backdrop-filter: blur(10px);
         border-bottom: 1px solid var(--border);
       }
-
       .topbar-inner {
         max-width: 1400px;
         margin: 0 auto;
@@ -46,18 +43,10 @@
         display: flex;
         align-items: center;
         justify-content: space-between;
+        gap: 10px;
       }
-
-      .brand {
-        font-weight: 800;
-        letter-spacing: 0.2px;
-      }
-
-      .nav {
-        display: flex;
-        gap: 8px;
-      }
-
+      .brand { font-weight: 800; letter-spacing: 0.2px; }
+      .nav { display: flex; gap: 8px; flex-wrap: wrap; }
       .nav a {
         text-decoration: none;
         color: var(--text);
@@ -65,20 +54,18 @@
         font-weight: 700;
         padding: 8px 12px;
         border-radius: 999px;
+        border: 1px solid transparent;
       }
-
       .nav a:hover,
       .nav a.active {
         background: var(--soft-bg);
-        border: 1px solid var(--border);
+        border-color: var(--border);
       }
 
-      /* Section */
       .section {
         background: var(--section-bg);
         padding: 36px 18px 56px;
       }
-
       .section-inner {
         max-width: 1400px;
         margin: 0 auto;
@@ -90,7 +77,6 @@
         font-weight: 800;
         margin: 10px 0 6px;
       }
-
       .page-subtitle {
         text-align: center;
         font-size: 13px;
@@ -98,31 +84,26 @@
         margin-bottom: 22px;
       }
 
-      /* Section blocks */
       .block-title {
         font-size: 20px;
         font-weight: 900;
         margin: 32px 0 6px;
       }
-
       .block-desc {
         font-size: 13px;
         color: var(--muted);
         margin-bottom: 14px;
       }
 
-      /* Grid */
       .grid {
         display: grid;
         grid-template-columns: repeat(2, minmax(0, 1fr));
         gap: 18px;
       }
-
       @media (max-width: 900px) {
         .grid { grid-template-columns: 1fr; }
       }
 
-      /* Cards */
       .card {
         background: var(--card-bg);
         border: 1px solid var(--border);
@@ -130,7 +111,6 @@
         padding: 14px;
         box-shadow: var(--shadow);
       }
-
       .card-head {
         display: flex;
         align-items: center;
@@ -138,7 +118,6 @@
         gap: 10px;
         margin-bottom: 10px;
       }
-
       .label {
         background: var(--soft-bg);
         border: 1px solid rgba(0, 0, 0, 0.12);
@@ -146,8 +125,8 @@
         padding: 10px 14px;
         font-size: 18px;
         font-weight: 900;
+        line-height: 1.1;
       }
-
       .source {
         font-size: 11px;
         font-weight: 800;
@@ -156,9 +135,9 @@
         border: 1px solid rgba(0, 0, 0, 0.12);
         background: var(--soft-bg);
         color: rgba(0, 0, 0, 0.75);
+        white-space: nowrap;
       }
 
-      /* Embed frame */
       .embed {
         height: 340px;
         border: 1px solid var(--border-strong);
@@ -166,14 +145,14 @@
         overflow: hidden;
         background: #fff;
       }
-
       .embed iframe {
         width: 100%;
         height: 100%;
         border: 0;
+        display: block;
       }
 
-      .embed-placeholder {
+      .placeholder {
         height: 100%;
         display: grid;
         place-items: center;
@@ -181,9 +160,9 @@
         padding: 18px;
         font-size: 13px;
         color: rgba(0, 0, 0, 0.55);
+        line-height: 1.35;
       }
-
-      .embed-placeholder code {
+      .placeholder code {
         margin-top: 10px;
         display: inline-block;
         padding: 6px 10px;
@@ -219,25 +198,39 @@
       <div class="section-inner">
         <div class="page-title">Event Markets</div>
         <div class="page-subtitle">
-          Curated Kalshi & Polymarket markets tracking US policy, monetary decisions, fiscal risk, and geopolitics.
+          Curated Kalshi &amp; Polymarket markets tracking US policy, monetary decisions, fiscal risk, and geopolitics.
         </div>
 
         <!-- MONETARY POLICY -->
         <div class="block-title">Monetary Policy</div>
-        <div class="block-desc">
-          FOMC outcomes, inflation prints, and rate path expectations.
-        </div>
+        <div class="block-desc">FOMC outcomes, inflation prints, and rate path expectations.</div>
 
         <div class="grid">
+          <!-- ✅ This one is now embedded (Kalshi external-widget) -->
           <div class="card">
             <div class="card-head">
-              <div class="label">Next FOMC Decision</div>
+              <div class="label">Next FOMC Decision (Jan 26)</div>
               <div class="source">Kalshi</div>
             </div>
             <div class="embed">
-              <div class="embed-placeholder">
-                Kalshi embed goes here
-                <br /><code>FOMC_DECISION</code>
+              <iframe
+                src="https://kalshi.com/external-widget/events-categorical/KXFEDDECISION-26JAN?color_scheme=light&period=1m&utm_source=iframe-embed&widget_size=large"
+                loading="lazy"
+                referrerpolicy="no-referrer-when-downgrade"
+                allow="clipboard-write; encrypted-media"
+              ></iframe>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-head">
+              <div class="label">Fed Funds Rate After Meeting</div>
+              <div class="source">Kalshi</div>
+            </div>
+            <div class="embed">
+              <div class="placeholder">
+                Paste Kalshi external-widget iframe here
+                <br /><code>FED_FUNDS_AFTER_MEETING</code>
               </div>
             </div>
           </div>
@@ -248,8 +241,8 @@
               <div class="source">Polymarket</div>
             </div>
             <div class="embed">
-              <div class="embed-placeholder">
-                Polymarket embed goes here
+              <div class="placeholder">
+                Paste Polymarket embed iframe here (from their Embed button)
                 <br /><code>FED_CUTS</code>
               </div>
             </div>
@@ -261,8 +254,8 @@
               <div class="source">Kalshi</div>
             </div>
             <div class="embed">
-              <div class="embed-placeholder">
-                Kalshi embed goes here
+              <div class="placeholder">
+                Paste Kalshi external-widget iframe here
                 <br /><code>CPI_THRESHOLD</code>
               </div>
             </div>
@@ -270,10 +263,8 @@
         </div>
 
         <!-- FISCAL -->
-        <div class="block-title">Fiscal & Government</div>
-        <div class="block-desc">
-          Shutdown risk, debt ceiling events, and fiscal deadlines.
-        </div>
+        <div class="block-title">Fiscal &amp; Government</div>
+        <div class="block-desc">Shutdown risk, debt ceiling events, and fiscal deadlines.</div>
 
         <div class="grid">
           <div class="card">
@@ -282,8 +273,8 @@
               <div class="source">Kalshi</div>
             </div>
             <div class="embed">
-              <div class="embed-placeholder">
-                Kalshi embed goes here
+              <div class="placeholder">
+                Paste Kalshi external-widget iframe here
                 <br /><code>SHUTDOWN_DATE</code>
               </div>
             </div>
@@ -295,8 +286,8 @@
               <div class="source">Polymarket</div>
             </div>
             <div class="embed">
-              <div class="embed-placeholder">
-                Polymarket embed goes here
+              <div class="placeholder">
+                Paste Polymarket embed iframe here
                 <br /><code>SHUTDOWN_YEAR</code>
               </div>
             </div>
@@ -305,9 +296,7 @@
 
         <!-- GEOPOLITICS -->
         <div class="block-title">Geopolitics</div>
-        <div class="block-desc">
-          Foreign affairs events with direct market relevance.
-        </div>
+        <div class="block-desc">Foreign affairs events with direct market relevance.</div>
 
         <div class="grid">
           <div class="card">
@@ -316,8 +305,8 @@
               <div class="source">Polymarket</div>
             </div>
             <div class="embed">
-              <div class="embed-placeholder">
-                Polymarket embed goes here
+              <div class="placeholder">
+                Paste Polymarket embed iframe here
                 <br /><code>UKRAINE</code>
               </div>
             </div>
@@ -329,17 +318,15 @@
               <div class="source">Polymarket</div>
             </div>
             <div class="embed">
-              <div class="embed-placeholder">
-                Polymarket embed goes here
+              <div class="placeholder">
+                Paste Polymarket embed iframe here
                 <br /><code>TAIWAN</code>
               </div>
             </div>
           </div>
         </div>
 
-        <div class="footer">
-          Static site • Markets embedded from Kalshi and Polymarket
-        </div>
+        <div class="footer">Static site • Markets embedded from Kalshi and Polymarket</div>
       </div>
     </section>
   </body>
